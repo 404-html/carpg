@@ -20,6 +20,7 @@ enum class EffectId
 	RangedAttack,
 	Defense,
 	PoisonResistance,
+	MagePower, // sum
 
 	Max // max 127 values
 };

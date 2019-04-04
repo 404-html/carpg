@@ -160,7 +160,10 @@ weapon sword_semur {
 	type long_blade
 	material metal
 	dmg_type slash
-	flags {not_chest not_shop not_random mage power4 unique}
+	flags {not_chest not_shop not_random mage unique}
+	effects {
+		mage_power 4
+	}
 }
 
 weapon sword_forbidden {
@@ -172,7 +175,10 @@ weapon sword_forbidden {
 	type long_blade
 	material crystal
 	dmg_type {slash pierce blunt}
-	flags {not_shop not_chest not_random power2 unique}
+	flags {not_shop not_chest not_random unique}
+	effects {
+		mage_power 2
+	}
 }
 
 weapon axe_rusted {
@@ -389,7 +395,10 @@ weapon wand_1 {
 	type blunt
 	material wood
 	dmg_type blunt
-	flags {not_shop not_chest mage power1 magical}
+	flags {not_shop not_chest mage magical}
+	effects {
+		mage_power 1
+	}
 }
 
 weapon wand_2 {
@@ -401,7 +410,10 @@ weapon wand_2 {
 	type blunt
 	material wood
 	dmg_type blunt
-	flags {not_shop not_chest mage power2 magical}
+	flags {not_shop not_chest mage magical}
+	effects {
+		mage_power 2
+	}
 }
 
 weapon wand_3 {
@@ -413,7 +425,10 @@ weapon wand_3 {
 	type blunt
 	material wood
 	dmg_type blunt
-	flags {not_shop not_chest mage power3 magical}
+	flags {not_shop not_chest mage magical}
+	effects {
+		mage_power 3
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -473,7 +488,10 @@ bow bow_angel {
 	attack 220
 	req_str 25
 	speed 60
-	flags {not_shop not_chest not_random power1 unique}
+	flags {not_shop not_chest not_random unique}
+	effects {
+		mage_power 1
+	}
 }
 
 bow q_gobliny_luk {
@@ -760,7 +778,10 @@ armor al_angelskin {
 	defense 180
 	req_str 20
 	mobility 100
-	flags {not_shop not_chest not_random power1 magic_resistance25 unique}
+	flags {not_shop not_chest not_random magic_resistance25 unique}
+	effects {
+		mage_power 1
+	}
 }
 
 armor am_hide {
@@ -1255,7 +1276,10 @@ armor al_orc_shaman {
 	defense 20
 	req_str 50
 	mobility 85
-	flags {not_shop not_chest mage power1 magical}
+	flags {not_shop not_chest mage magical}
+	effects {
+		mage_power 1
+	}
 }
 
 armor am_orc {
@@ -1281,7 +1305,10 @@ armor al_mage {
 	defense 20
 	req_str 20
 	mobility 90
-	flags {not_shop not_chest mage power1 magical}
+	flags {not_shop not_chest mage magical}
+	effects {
+		mage_power 1
+	}
 }
 
 armor al_mage2 {
@@ -1295,7 +1322,10 @@ armor al_mage2 {
 	defense 30
 	req_str 20
 	mobility 90
-	flags {not_shop not_chest mage power2 magic_resistance10 magical}
+	flags {not_shop not_chest mage magic_resistance10 magical}
+	effects {
+		mage_power 2
+	}
 }
 
 armor al_mage3 {
@@ -1309,7 +1339,10 @@ armor al_mage3 {
 	defense 40
 	req_str 20
 	mobility 90
-	flags {not_shop not_chest mage power3 magic_resistance10 magical}
+	flags {not_shop not_chest mage magic_resistance10 magical}
+	effects {
+		mage_power 3
+	}
 }
 
 armor al_mage4 {
@@ -1323,7 +1356,10 @@ armor al_mage4 {
 	defense 50
 	req_str 20
 	mobility 90
-	flags {not_shop not_chest mage power4 magic_resistance25 unique}
+	flags {not_shop not_chest mage magic_resistance25 unique}
+	effects {
+		mage_power 4
+	}
 }
 
 armor al_necromancer {
@@ -1336,7 +1372,10 @@ armor al_necromancer {
 	defense 50
 	req_str 25
 	mobility 80
-	flags {not_shop not_chest power2 magic_resistance10 magical}
+	flags {not_shop not_chest magic_resistance10 magical}
+	effects {
+		mage_power 2
+	}
 }
 
 armor al_clothes {

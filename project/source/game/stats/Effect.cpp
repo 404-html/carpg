@@ -17,7 +17,8 @@ EffectInfo EffectInfo::effects[] = {
 	EffectId::MeleeAttack, "melee_attack", "modify melee attack",
 	EffectId::RangedAttack, "ranged_attack", "modify ranged attack",
 	EffectId::Defense, "defense", "modify defense",
-	EffectId::PoisonResistance, "poison_resistance", "poison resistance %"
+	EffectId::PoisonResistance, "poison_resistance", "poison resistance %",
+	EffectId::MagePower, "mage_power", "mage power"
 };
 
 EffectId EffectInfo::TryGet(const string& id)

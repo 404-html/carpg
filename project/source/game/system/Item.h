@@ -26,10 +26,10 @@ enum ITEM_FLAGS
 	ITEM_DONT_DROP = 1 << 6, // can't drop when in dialog
 	//ITEM_SECRET = 1 << 7, - removed
 	ITEM_BACKSTAB = 1 << 8,
-	ITEM_POWER_1 = 1 << 9,
-	ITEM_POWER_2 = 1 << 10,
-	ITEM_POWER_3 = 1 << 11,
-	ITEM_POWER_4 = 1 << 12,
+	//ITEM_POWER_1 = 1 << 9,
+	//ITEM_POWER_2 = 1 << 10,
+	//ITEM_POWER_3 = 1 << 11,
+	//ITEM_POWER_4 = 1 << 12,
 	ITEM_MAGIC_RESISTANCE_10 = 1 << 13,
 	ITEM_MAGIC_RESISTANCE_25 = 1 << 14,
 	ITEM_GROUND_MESH = 1 << 15, // when on ground is displayed as mesh not as bag
@@ -61,6 +61,13 @@ struct CstringHash
 typedef std::unordered_map<cstring, Item*, CstringHash, CstringEqualComparer> ItemsMap;
 
 //-----------------------------------------------------------------------------
+struct ItemEffect
+{
+	EffectId effect;
+	float power;
+};
+
+//-----------------------------------------------------------------------------
 // Base item type
 struct Item
 {
@@ -85,116 +92,34 @@ struct Item
 		return *(const T*)this;
 	}
 
-	Weapon& ToWeapon()
-	{
-		return Cast<Weapon, IT_WEAPON>();
-	}
-	Bow& ToBow()
-	{
-		return Cast<Bow, IT_BOW>();
-	}
-	Shield& ToShield()
-	{
-		return Cast<Shield, IT_SHIELD>();
-	}
-	Armor& ToArmor()
-	{
-		return Cast<Armor, IT_ARMOR>();
-	}
-	Amulet& ToAmulet()
-	{
-		return Cast<Amulet, IT_AMULET>();
-	}
-	Consumable& ToConsumable()
-	{
-		return Cast<Consumable, IT_CONSUMABLE>();
-	}
-	OtherItem& ToOther()
-	{
-		return Cast<OtherItem, IT_OTHER>();
-	}
-	Book& ToBook()
-	{
-		return Cast<Book, IT_BOOK>();
-	}
+	Weapon& ToWeapon() { return Cast<Weapon, IT_WEAPON>(); }
+	Bow& ToBow() { return Cast<Bow, IT_BOW>(); }
+	Shield& ToShield() { return Cast<Shield, IT_SHIELD>(); }
+	Armor& ToArmor() { return Cast<Armor, IT_ARMOR>(); }
+	Amulet& ToAmulet() { return Cast<Amulet, IT_AMULET>(); }
+	Consumable& ToConsumable() { return Cast<Consumable, IT_CONSUMABLE>(); }
+	OtherItem& ToOther() { return Cast<OtherItem, IT_OTHER>(); }
+	Book& ToBook() { return Cast<Book, IT_BOOK>(); }
 
-	const Weapon& ToWeapon() const
-	{
-		return Cast<Weapon, IT_WEAPON>();
-	}
-	const Bow& ToBow() const
-	{
-		return Cast<Bow, IT_BOW>();
-	}
-	const Shield& ToShield() const
-	{
-		return Cast<Shield, IT_SHIELD>();
-	}
-	const Armor& ToArmor() const
-	{
-		return Cast<Armor, IT_ARMOR>();
-	}
-	const Amulet& ToAmulet() const
-	{
-		return Cast<Amulet, IT_AMULET>();
-	}
-	const Consumable& ToConsumable() const
-	{
-		return Cast<Consumable, IT_CONSUMABLE>();
-	}
-	const OtherItem& ToOther() const
-	{
-		return Cast<OtherItem, IT_OTHER>();
-	}
-	const Book& ToBook() const
-	{
-		return Cast<Book, IT_BOOK>();
-	}
+	const Weapon& ToWeapon() const { return Cast<Weapon, IT_WEAPON>(); }
+	const Bow& ToBow() const { return Cast<Bow, IT_BOW>(); }
+	const Shield& ToShield() const { return Cast<Shield, IT_SHIELD>(); }
+	const Armor& ToArmor() const { return Cast<Armor, IT_ARMOR>(); }
+	const Amulet& ToAmulet() const { return Cast<Amulet, IT_AMULET>(); }
+	const Consumable& ToConsumable() const { return Cast<Consumable, IT_CONSUMABLE>(); }
+	const OtherItem& ToOther() const { return Cast<OtherItem, IT_OTHER>(); }
+	const Book& ToBook() const { return Cast<Book, IT_BOOK>(); }
 
-	float GetWeight() const
-	{
-		return float(weight) / 10;
-	}
-	bool IsStackable() const
-	{
-		return type == IT_CONSUMABLE || type == IT_GOLD || (type == IT_OTHER && !IS_SET(flags, ITEM_QUEST)) || type == IT_BOOK;
-	}
-	bool CanBeGenerated() const
-	{
-		return !IS_SET(flags, ITEM_NOT_RANDOM);
-	}
-	bool IsWearable() const
-	{
-		return Any(type, IT_WEAPON, IT_BOW, IT_SHIELD, IT_ARMOR, IT_AMULET);
-	}
+	bool IsStackable() const { return Any(type, IT_CONSUMABLE, IT_GOLD, IT_BOOK) || (type == IT_OTHER && !IS_SET(flags, ITEM_QUEST)); }
+	bool CanBeGenerated() const { return !IS_SET(flags, ITEM_NOT_RANDOM); }
+	bool IsWearable() const { return Any(type, IT_WEAPON, IT_BOW, IT_SHIELD, IT_ARMOR, IT_AMULET); }
 	bool IsWearableByHuman() const;
-	bool IsQuest() const
-	{
-		return IS_SET(flags, ITEM_QUEST);
-	}
-	bool IsQuest(int quest_refid) const
-	{
-		return IsQuest() && refid == quest_refid;
-	}
+	bool IsQuest() const { return IS_SET(flags, ITEM_QUEST); }
+	bool IsQuest(int quest_refid) const { return IsQuest() && refid == quest_refid; }
 
-	int GetMagicPower() const
-	{
-		if(IS_SET(flags, ITEM_POWER_1))
-			return 1;
-		else if(IS_SET(flags, ITEM_POWER_2))
-			return 2;
-		else if(IS_SET(flags, ITEM_POWER_3))
-			return 3;
-		else if(IS_SET(flags, ITEM_POWER_4))
-			return 4;
-		else
-			return 0;
-	}
-
-	float GetWeightValue() const
-	{
-		return float(value) / weight;
-	}
+	float GetWeight() const { return float(weight) / 10; }
+	float GetWeightValue() const { return float(value) / weight; }
+	float GetEffectPower(EffectId effect) const;
 
 	void CreateCopy(Item& item) const;
 	Item* CreateCopy() const;
@@ -203,6 +128,7 @@ struct Item
 
 	string id, mesh_id, name, desc;
 	int weight, value, flags, refid;
+	vector<ItemEffect> effects;
 	ITEM_TYPE type;
 	MeshPtr mesh;
 	TexturePtr tex;
