@@ -143,7 +143,8 @@ void ItemLoader::InitTokenizer()
 		{ "speed", P_SPEED },
 		{ "scheme", P_SCHEME },
 		{ "runic", P_RUNIC },
-		{ "block", P_BLOCK }
+		{ "block", P_BLOCK },
+		{ "effects", P_EFFECTS }
 		});
 
 	t.AddKeywords(G_WEAPON_TYPE, {

@@ -598,7 +598,7 @@ public:
 
 	float CalculateMagicResistance() const;
 	float GetPoisonResistance() const;
-	int CalculateMagicPower() const;
+	int CalculateMagicPower() const { return (int)GetEffectSum(EffectId::MagicPower); }
 
 	//-----------------------------------------------------------------------------
 	// EFFECTS

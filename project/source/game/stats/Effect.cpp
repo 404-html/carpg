@@ -22,7 +22,7 @@ EffectInfo EffectInfo::effects[] = {
 	EffectInfo(EffectId::Attribute, "attribute", "modify attribute", EffectInfo::Attribute),
 	EffectInfo(EffectId::Skill, "skill", "modify skill", EffectInfo::Skill),
 	EffectInfo(EffectId::StaminaRegenerationMod, "stamina_regeneration_mod", "stamina regeneration modifier %"),
-	EffectInfo(EffectId::MagePower, "mage_power", "mage power")
+	EffectInfo(EffectId::MagicPower, "magic_power", "magic power")
 };
 
 EffectId EffectInfo::TryGet(const string& id)

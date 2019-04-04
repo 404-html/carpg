@@ -3563,22 +3563,6 @@ float Unit::GetPoisonResistance() const
 }
 
 //=================================================================================================
-int Unit::CalculateMagicPower() const
-{
-	int mlvl = 0;
-	if(HaveArmor())
-		mlvl += GetArmor().GetMagicPower();
-	if(weapon_state == WS_TAKEN)
-	{
-		if(weapon_taken == W_ONE_HANDED)
-			mlvl += GetWeapon().GetMagicPower();
-		else
-			mlvl += GetBow().GetMagicPower();
-	}
-	return mlvl;
-}
-
-//=================================================================================================
 bool Unit::HaveEffect(EffectId e) const
 {
 	for(vector<Effect>::const_iterator it = effects.begin(), end = effects.end(); it != end; ++it)

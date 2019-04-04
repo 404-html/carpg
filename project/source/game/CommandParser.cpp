@@ -486,7 +486,7 @@ void CommandParser::ListStats(Unit* u)
 		u->HaveShield() ? Format("%d", (int)u->CalculateBlock()) : "");
 	Msg("Mobility: %d (bonus %+g)", (int)u->CalculateMobility(), u->GetEffectSum(EffectId::Mobility));
 	Msg("Carry: %g/%g (mod: x%g)", float(u->weight) / 10, float(u->weight_max) / 10, u->GetEffectMul(EffectId::Carry));
-	Msg("Magic resistance: %d%%", (int)((1.f - u->CalculateMagicResistance()) * 100));
+	Msg("Magic resistance: %d%%, magic power: %+d", (int)((1.f - u->CalculateMagicResistance()) * 100), u->CalculateMagicPower());
 	Msg("Poison resistance: %d%%", (int)((1.f - u->GetEffectMul(EffectId::PoisonResistance)) * 100));
 	LocalString s = "Attributes: ";
 	for(int i = 0; i < (int)AttributeId::MAX; ++i)

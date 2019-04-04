@@ -203,7 +203,7 @@ bool Game::LoadRequiredStats(uint& errors)
 				case R_ITEM:
 					{
 						ItemListResult result;
-						const Item* item = Item::Get(str);
+						const Item* item = Item::TryGet(str);
 						if(!item)
 						{
 							Error("Missing required item '%s'.", str.c_str());

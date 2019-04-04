@@ -24,7 +24,7 @@ enum class EffectId
 	Attribute,
 	Skill,
 	StaminaRegenerationMod, // multiple
-	MagePower, // sum
+	MagicPower, // sum
 
 	Max // max 127 values
 };

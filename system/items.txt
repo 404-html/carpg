@@ -162,7 +162,7 @@ weapon sword_semur {
 	dmg_type slash
 	flags {not_chest not_shop not_random mage unique}
 	effects {
-		mage_power 4
+		magic_power 4
 	}
 }
 
@@ -177,7 +177,7 @@ weapon sword_forbidden {
 	dmg_type {slash pierce blunt}
 	flags {not_shop not_chest not_random unique}
 	effects {
-		mage_power 2
+		magic_power 2
 	}
 }
 
@@ -397,7 +397,7 @@ weapon wand_1 {
 	dmg_type blunt
 	flags {not_shop not_chest mage magical}
 	effects {
-		mage_power 1
+		magic_power 1
 	}
 }
 
@@ -412,7 +412,7 @@ weapon wand_2 {
 	dmg_type blunt
 	flags {not_shop not_chest mage magical}
 	effects {
-		mage_power 2
+		magic_power 2
 	}
 }
 
@@ -427,7 +427,7 @@ weapon wand_3 {
 	dmg_type blunt
 	flags {not_shop not_chest mage magical}
 	effects {
-		mage_power 3
+		magic_power 3
 	}
 }
 
@@ -490,7 +490,7 @@ bow bow_angel {
 	speed 60
 	flags {not_shop not_chest not_random unique}
 	effects {
-		mage_power 1
+		magic_power 1
 	}
 }
 
@@ -780,7 +780,7 @@ armor al_angelskin {
 	mobility 100
 	flags {not_shop not_chest not_random magic_resistance25 unique}
 	effects {
-		mage_power 1
+		magic_power 1
 	}
 }
 
@@ -1278,7 +1278,7 @@ armor al_orc_shaman {
 	mobility 85
 	flags {not_shop not_chest mage magical}
 	effects {
-		mage_power 1
+		magic_power 1
 	}
 }
 
@@ -1307,7 +1307,7 @@ armor al_mage {
 	mobility 90
 	flags {not_shop not_chest mage magical}
 	effects {
-		mage_power 1
+		magic_power 1
 	}
 }
 
@@ -1324,7 +1324,7 @@ armor al_mage2 {
 	mobility 90
 	flags {not_shop not_chest mage magic_resistance10 magical}
 	effects {
-		mage_power 2
+		magic_power 2
 	}
 }
 
@@ -1341,7 +1341,7 @@ armor al_mage3 {
 	mobility 90
 	flags {not_shop not_chest mage magic_resistance10 magical}
 	effects {
-		mage_power 3
+		magic_power 3
 	}
 }
 
@@ -1358,7 +1358,7 @@ armor al_mage4 {
 	mobility 90
 	flags {not_shop not_chest mage magic_resistance25 unique}
 	effects {
-		mage_power 4
+		magic_power 4
 	}
 }
 
@@ -1374,7 +1374,7 @@ armor al_necromancer {
 	mobility 80
 	flags {not_shop not_chest magic_resistance10 magical}
 	effects {
-		mage_power 2
+		magic_power 2
 	}
 }
 
