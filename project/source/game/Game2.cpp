@@ -5729,6 +5729,7 @@ void Game::UpdateBullets(LevelContext& ctx, float dt)
 						e.effect = EffectId::Poison;
 						e.source = EffectSource::Temporary;
 						e.source_id = -1;
+						e.value = -1;
 						e.power = it->poison_attack / 5 * poison_res;
 						e.time = 5.f;
 						hitted->AddEffect(e);
@@ -5804,6 +5805,7 @@ void Game::UpdateBullets(LevelContext& ctx, float dt)
 						e.effect = EffectId::Poison;
 						e.source = EffectSource::Temporary;
 						e.source_id = -1;
+						e.value = -1;
 						e.power = dmg / 5 * poison_res;
 						e.time = 5.f;
 						hitted->AddEffect(e);
@@ -6347,6 +6349,7 @@ Game::ATTACK_RESULT Game::DoGenericAttack(LevelContext& ctx, Unit& attacker, Uni
 			e.effect = EffectId::Poison;
 			e.source = EffectSource::Temporary;
 			e.source_id = -1;
+			e.value = -1;
 			e.power = dmg / 10 * poison_res;
 			e.time = 5.f;
 			hitted.AddEffect(e);
@@ -7886,6 +7889,8 @@ SOUND Game::GetItemSound(const Item* item)
 			return sItem[1];
 	case IT_AMULET:
 		return sItem[8];
+	case IT_RING:
+		return sItem[9];
 	case IT_CONSUMABLE:
 		if(item->ToConsumable().cons_type != Food)
 			return sItem[0];

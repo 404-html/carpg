@@ -97,6 +97,7 @@ struct Item
 	Shield& ToShield() { return Cast<Shield, IT_SHIELD>(); }
 	Armor& ToArmor() { return Cast<Armor, IT_ARMOR>(); }
 	Amulet& ToAmulet() { return Cast<Amulet, IT_AMULET>(); }
+	Ring& ToRing() { return Cast<Ring, IT_RING>(); }
 	Consumable& ToConsumable() { return Cast<Consumable, IT_CONSUMABLE>(); }
 	OtherItem& ToOther() { return Cast<OtherItem, IT_OTHER>(); }
 	Book& ToBook() { return Cast<Book, IT_BOOK>(); }
@@ -106,13 +107,14 @@ struct Item
 	const Shield& ToShield() const { return Cast<Shield, IT_SHIELD>(); }
 	const Armor& ToArmor() const { return Cast<Armor, IT_ARMOR>(); }
 	const Amulet& ToAmulet() const { return Cast<Amulet, IT_AMULET>(); }
+	const Ring& ToRing() const { return Cast<Ring, IT_RING>(); }
 	const Consumable& ToConsumable() const { return Cast<Consumable, IT_CONSUMABLE>(); }
 	const OtherItem& ToOther() const { return Cast<OtherItem, IT_OTHER>(); }
 	const Book& ToBook() const { return Cast<Book, IT_BOOK>(); }
 
 	bool IsStackable() const { return Any(type, IT_CONSUMABLE, IT_GOLD, IT_BOOK) || (type == IT_OTHER && !IS_SET(flags, ITEM_QUEST)); }
 	bool CanBeGenerated() const { return !IS_SET(flags, ITEM_NOT_RANDOM); }
-	bool IsWearable() const { return Any(type, IT_WEAPON, IT_BOW, IT_SHIELD, IT_ARMOR, IT_AMULET); }
+	bool IsWearable() const { return Any(type, IT_WEAPON, IT_BOW, IT_SHIELD, IT_ARMOR, IT_AMULET, IT_RING); }
 	bool IsWearableByHuman() const;
 	bool IsQuest() const { return IS_SET(flags, ITEM_QUEST); }
 	bool IsQuest(int quest_refid) const { return IsQuest() && refid == quest_refid; }
@@ -322,7 +324,7 @@ inline bool Item::IsWearableByHuman() const
 	if(type == IT_ARMOR)
 		return ToArmor().armor_unit_type == ArmorUnitType::HUMAN;
 	else
-		return Any(type, IT_WEAPON, IT_BOW, IT_SHIELD, IT_AMULET);
+		return Any(type, IT_WEAPON, IT_BOW, IT_SHIELD, IT_AMULET, IT_RING);
 }
 
 //-----------------------------------------------------------------------------
@@ -332,6 +334,15 @@ struct Amulet : public Item
 	Amulet() : Item(IT_AMULET) {}
 
 	static vector<Amulet*> amulets;
+};
+
+//-----------------------------------------------------------------------------
+// Ring
+struct Ring : public Item
+{
+	Ring() : Item(IT_RING) {}
+
+	static vector<Ring*> rings;
 };
 
 //-----------------------------------------------------------------------------
