@@ -271,6 +271,18 @@ void Unit::SetGold(int new_gold)
 }
 
 //=================================================================================================
+bool Unit::CanWear(const Item* item) const
+{
+	if(item->IsWearable())
+	{
+		if(item->type == IT_ARMOR)
+			return item->ToArmor().armor_unit_type == data->armor_type;
+		return true;
+	}
+	return false;
+}
+
+//=================================================================================================
 bool Unit::DropItem(int index)
 {
 	bool no_more = false;
@@ -349,6 +361,8 @@ void Unit::DropItem(ITEM_SLOT slot)
 
 	if(Net::IsLocal())
 	{
+		RemoveItemEffects(item2, slot);
+
 		GroundItem* item = new GroundItem;
 		item->item = item2;
 		item->count = 1;
@@ -843,6 +857,32 @@ void Unit::OnAddRemoveEffect(Effect& e)
 }
 
 //=================================================================================================
+void Unit::ApplyItemEffects(const Item* item, ITEM_SLOT slot)
+{
+	if(item->effects.empty())
+		return;
+	for(const ItemEffect& e : item->effects)
+	{
+		Effect effect;
+		effect.effect = e.effect;
+		effect.power = e.power;
+		effect.source = EffectSource::Item;
+		effect.source_id = (int)slot;
+		effect.value = -1;
+		effect.time = 0.f;
+		AddEffect(effect);
+	}
+}
+
+//=================================================================================================
+void Unit::RemoveItemEffects(const Item* item, ITEM_SLOT slot)
+{
+	if(item->effects.empty())
+		return;
+	RemoveEffects(EffectId::None, EffectSource::Item, (int)slot, -1);
+}
+
+//=================================================================================================
 void Unit::ApplyConsumableEffect(const Consumable& item)
 {
 	switch(item.effect)
@@ -1262,53 +1302,25 @@ void Unit::AddItemAndEquipIfNone(const Item* item, uint count)
 {
 	assert(item && count != 0);
 
-	if(item->IsStackable())
-		AddItem(item, count, count);
-	else
+	if(item->IsStackable() || !CanWear(item))
 	{
-		// za³ó¿ jeœli nie ma
-		switch(item->type)
-		{
-		case IT_WEAPON:
-			if(!HaveWeapon())
-			{
-				slots[SLOT_WEAPON] = item;
-				--count;
-			}
-			break;
-		case IT_BOW:
-			if(!HaveBow())
-			{
-				slots[SLOT_BOW] = item;
-				--count;
-			}
-			break;
-		case IT_SHIELD:
-			if(!HaveShield())
-			{
-				slots[SLOT_SHIELD] = item;
-				--count;
-			}
-			break;
-		case IT_ARMOR:
-			if(!HaveArmor())
-			{
-				slots[SLOT_ARMOR] = item;
-				--count;
-			}
-			break;
-		case IT_AMULET:
-			if(!HaveAmulet())
-			{
-				slots[SLOT_AMULET] = item;
-				--count;
-			}
-			break;
-		}
-
-		if(count)
-			AddItem(item, count, count);
+		AddItem(item, count, count);
+		return;
 	}
+
+	ITEM_SLOT item_slot = ItemTypeToSlot(item->type);
+	if(item_slot == SLOT_RING1 && slots[item_slot])
+		item_slot = SLOT_RING2;
+
+	if(!slots[item_slot])
+	{
+		slots[item_slot] = item;
+		ApplyItemEffects(item, item_slot);
+		--count;
+	}
+
+	if(count)
+		AddItem(item, count, count);
 }
 
 //=================================================================================================
@@ -2785,7 +2797,7 @@ void Unit::ReequipItemsInternal()
 			item_slot.item = nullptr;
 			changes = true;
 		}
-		else if(item_slot.item->IsWearableByHuman())
+		else if(CanWear(item_slot.item))
 		{
 			ITEM_SLOT slot = ItemTypeToSlot(item_slot.item->type);
 			assert(slot != SLOT_INVALID);
@@ -2795,12 +2807,15 @@ void Unit::ReequipItemsInternal()
 				if(slots[slot]->value < item_slot.item->value)
 				{
 					const Item* item = slots[slot];
+					RemoveItemEffects(item, slot);
+					ApplyItemEffects(item_slot.item, slot);
 					slots[slot] = item_slot.item;
 					item_slot.item = item;
 				}
 			}
 			else
 			{
+				ApplyItemEffects(item_slot.item, slot);
 				slots[slot] = item_slot.item;
 				item_slot.item = nullptr;
 				changes = true;
@@ -3381,15 +3396,11 @@ bool Unit::IsBetterItem(const Item* item, int* value) const
 				return false;
 		}
 	case IT_BOW:
-		if(!HaveBow())
+	case IT_SHIELD:
+	case IT_AMULET:
 		{
-			if(value)
-				*value = item->value;
-			return true;
-		}
-		else
-		{
-			if(GetBow().value < item->value)
+			ITEM_SLOT slot_type = ItemTypeToSlot(item->type);
+			if(!slots[slot_type] || slots[slot_type]->value < item->value)
 			{
 				if(value)
 					*value = item->value;
@@ -3412,42 +3423,14 @@ bool Unit::IsBetterItem(const Item* item, int* value) const
 			else
 				return false;
 		}
-	case IT_SHIELD:
-		if(!HaveShield())
+	case IT_RING:
+		if(!slots[SLOT_RING1] || !slots[SLOT_RING2] || slots[SLOT_RING1]->value < item->value || slots[SLOT_RING2]->value < item->value)
 		{
 			if(value)
 				*value = item->value;
-			return true;
 		}
 		else
-		{
-			if(GetShield().value < item->value)
-			{
-				if(value)
-					*value = item->value;
-				return true;
-			}
-			else
-				return false;
-		}
-	case IT_AMULET:
-		if(!HaveAmulet())
-		{
-			if(value)
-				*value = item->value;
-			return true;
-		}
-		else
-		{
-			if(GetAmulet().value < item->value)
-			{
-				if(value)
-					*value = item->value;
-				return true;
-			}
-			else
-				return false;
-		}
+			return false;
 	default:
 		assert(0);
 		return false;

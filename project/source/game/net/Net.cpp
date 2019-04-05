@@ -588,7 +588,7 @@ bool Game::ProcessControlMessageServer(BitStreamReader& f, PlayerInfo& info)
 						}
 
 						ItemSlot& slot = unit.items[i_index];
-						if(!slot.item->IsWearableByHuman())
+						if(!unit.CanWear(slot.item))
 						{
 							Error("Update server: CHANGE_EQUIPMENT from %s, item at index %d (%s) is not wearable.",
 								info.name.c_str(), i_index, slot.item->id.c_str());
@@ -607,11 +607,14 @@ bool Game::ProcessControlMessageServer(BitStreamReader& f, PlayerInfo& info)
 						}
 						if(unit.slots[slot_type])
 						{
+							unit.RemoveItemEffects(unit.slots[slot_type], slot_type);
+							unit.ApplyItemEffects(slot.item, slot_type);
 							std::swap(unit.slots[slot_type], slot.item);
 							SortItems(unit.items);
 						}
 						else
 						{
+							unit.ApplyItemEffects(slot.item, slot_type);
 							unit.slots[slot_type] = slot.item;
 							unit.items.erase(unit.items.begin() + i_index);
 						}
@@ -636,6 +639,7 @@ bool Game::ProcessControlMessageServer(BitStreamReader& f, PlayerInfo& info)
 							Error("Update server: CHANGE_EQUIPMENT from %s, empty slot type %d.", info.name.c_str(), slot);
 						else
 						{
+							unit.RemoveItemEffects(unit.slots[slot], slot);
 							unit.AddItem(unit.slots[slot], 1u, false);
 							unit.weight -= unit.slots[slot]->weight;
 							unit.slots[slot] = nullptr;
@@ -868,6 +872,7 @@ bool Game::ProcessControlMessageServer(BitStreamReader& f, PlayerInfo& info)
 							break;
 						}
 
+						unit.RemoveItemEffects(slot, slot_type);
 						unit.weight -= slot->weight*count;
 						item = new GroundItem;
 						item->item = slot;
@@ -1214,6 +1219,7 @@ bool Game::ProcessControlMessageServer(BitStreamReader& f, PlayerInfo& info)
 							c.unit = player.action_unit;
 						}
 					}
+					player.action_unit->RemoveItemEffects(slot, type);
 					player.action_unit->weight -= slot->weight;
 					slot = nullptr;
 
@@ -1379,6 +1385,7 @@ bool Game::ProcessControlMessageServer(BitStreamReader& f, PlayerInfo& info)
 						}
 					}
 					// remove equipped
+					unit.RemoveItemEffects(slot, type);
 					unit.weight -= slot->weight;
 					slot = nullptr;
 					// send info about changing equipment
@@ -1413,6 +1420,7 @@ bool Game::ProcessControlMessageServer(BitStreamReader& f, PlayerInfo& info)
 					{
 						if(slots[i])
 						{
+							player.action_unit->RemoveItemEffects(slots[i], (ITEM_SLOT)i);
 							InsertItemBare(unit.items, slots[i]);
 							slots[i] = nullptr;
 							changes = true;
@@ -1509,7 +1517,7 @@ bool Game::ProcessControlMessageServer(BitStreamReader& f, PlayerInfo& info)
 				}
 
 				ItemSlot& slot = unit.items[index];
-				if(slot.item->IsWearableByHuman() && slot.team_count != 0)
+				if(unit.CanWear(slot.item) && slot.team_count != 0)
 				{
 					slot.team_count = 0;
 					player.credit += slot.item->value / 2;

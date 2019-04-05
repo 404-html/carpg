@@ -115,7 +115,6 @@ struct Item
 	bool IsStackable() const { return Any(type, IT_CONSUMABLE, IT_GOLD, IT_BOOK) || (type == IT_OTHER && !IS_SET(flags, ITEM_QUEST)); }
 	bool CanBeGenerated() const { return !IS_SET(flags, ITEM_NOT_RANDOM); }
 	bool IsWearable() const { return Any(type, IT_WEAPON, IT_BOW, IT_SHIELD, IT_ARMOR, IT_AMULET, IT_RING); }
-	bool IsWearableByHuman() const;
 	bool IsQuest() const { return IS_SET(flags, ITEM_QUEST); }
 	bool IsQuest(int quest_refid) const { return IsQuest() && refid == quest_refid; }
 
@@ -316,16 +315,6 @@ struct Armor : public Item
 
 	static vector<Armor*> armors;
 };
-
-//-----------------------------------------------------------------------------
-// Can item can be weared by human?
-inline bool Item::IsWearableByHuman() const
-{
-	if(type == IT_ARMOR)
-		return ToArmor().armor_unit_type == ArmorUnitType::HUMAN;
-	else
-		return Any(type, IT_WEAPON, IT_BOW, IT_SHIELD, IT_AMULET, IT_RING);
-}
 
 //-----------------------------------------------------------------------------
 // Amulet

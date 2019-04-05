@@ -36,6 +36,7 @@ enum class EffectSource
 	Temporary, // potion or magic effect
 	Permanent,
 	Perk,
+	Item,
 	Max
 };
 

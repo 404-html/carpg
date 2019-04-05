@@ -544,7 +544,7 @@ void TeamSingleton::CheckTeamItemShares()
 			int index = 0;
 			for(ItemSlot& slot : other_unit->items)
 			{
-				if(slot.item && slot.item->IsWearableByHuman() && slot.item->type != IT_AMULET && slot.item->type != IT_RING)
+				if(slot.item && unit->CanWear(slot.item) && slot.item->type != IT_AMULET && slot.item->type != IT_RING)
 				{
 					// don't check if can't buy
 					if(slot.team_count == 0 && slot.item->value / 2 > unit->gold && unit != other_unit)

@@ -624,6 +624,8 @@ public:
 	float GetEffectMax(EffectId effect) const;
 	bool HaveEffect(EffectId effect) const;
 	void OnAddRemoveEffect(Effect& e);
+	void ApplyItemEffects(const Item* item, ITEM_SLOT slot);
+	void RemoveItemEffects(const Item* item, ITEM_SLOT slot);
 
 	//-----------------------------------------------------------------------------
 	// EQUIPMENT
@@ -640,6 +642,7 @@ public:
 	bool HaveShield() const { return slots[SLOT_SHIELD] != nullptr; }
 	bool HaveArmor() const { return slots[SLOT_ARMOR] != nullptr; }
 	bool HaveAmulet() const { return slots[SLOT_AMULET] != nullptr; }
+	bool CanWear(const Item* item) const;
 	const Weapon& GetWeapon() const
 	{
 		assert(HaveWeapon());

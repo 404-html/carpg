@@ -99,9 +99,17 @@ bool CommandParser::ParseStreamInner(BitStreamReader& f)
 			}
 			if(e.source == EffectSource::Perk)
 			{
-				if(e.source_id >= (int)Perk::Max)
+				if(e.source_id < 0 || e.source_id >= (int)Perk::Max)
 				{
 					Error("CommandParser CMD_ADD_EFFECT: Invalid source id %d for perk source.", e.source_id);
+					return false;
+				}
+			}
+			else if(e.source == EffectSource::Item)
+			{
+				if(e.source_id < 0 || e.source_id >= SLOT_MAX)
+				{
+					Error("CommandParser CMD_ADD_EFFECT: Invalid source id %d for item source.", e.source_id);
 					return false;
 				}
 			}
@@ -165,9 +173,17 @@ bool CommandParser::ParseStreamInner(BitStreamReader& f)
 			}
 			if(source == EffectSource::Perk)
 			{
-				if(source_id >= (int)Perk::Max)
+				if(source_id < 0 || source_id >= (int)Perk::Max)
 				{
 					Error("CommandParser CMD_REMOVE_EFFECT: Invalid source id %d for perk source.", source_id);
+					return false;
+				}
+			}
+			else if(source == EffectSource::Item)
+			{
+				if(source_id < 0 || source_id >= SLOT_MAX)
+				{
+					Error("CommandParser CMD_REMOVE_EFFECT: Invalid source id %d for item source.", source_id);
 					return false;
 				}
 			}
@@ -419,6 +435,14 @@ void CommandParser::ListEffects(Unit* u)
 			break;
 		case EffectSource::Permanent:
 			s += "permanent";
+			break;
+		case EffectSource::Item:
+			s += "item (";
+			if(e.source_id < 0 || e.source_id >= SLOT_MAX)
+				s += Format("invalid %d", e.source_id);
+			else
+				s += ItemSlotInfo::slots[e.source_id].id;
+			s += ')';
 			break;
 		}
 	}
