@@ -57,6 +57,7 @@ struct ItemEffect
 {
 	EffectId effect;
 	float power;
+	int value;
 	bool on_attack;
 };
 
@@ -113,6 +114,7 @@ struct Item
 
 	float GetWeight() const { return float(weight) / 10; }
 	float GetWeightValue() const { return float(value) / weight; }
+	float GetEffectPower(EffectId effect) const;
 
 	void CreateCopy(Item& item) const;
 	Item* CreateCopy() const;
@@ -327,27 +329,6 @@ struct Ring : public Item
 };
 
 //-----------------------------------------------------------------------------
-// Consumable item effects
-enum ConsumeEffect
-{
-	E_NONE, // no effects
-	E_HEAL, // heals instantly X hp
-	E_REGENERATE, // heals X hp/sec for Y sec (don't stack)
-	E_NATURAL, // speed up natural regeneration for Y days
-	E_ANTIDOTE, // remove poison and alcohol
-	E_POISON, // deal X dmg/sec for Y sec
-	E_ALCOHOL, // deals X alcohol points in Y sec
-	E_STR, // permanently increase strength
-	E_END, // permanently increase endurance
-	E_DEX, // permanently increase dexterity
-	E_ANTIMAGIC, // gives 50% magic resistance for Y sec
-	E_FOOD, // heals 1 hp/sec for Y sec (stack)
-	E_GREEN_HAIR, // turn hair into green
-	E_STAMINA, // regenerate stamina
-	E_STUN, // unit stunned, can't do anything
-};
-
-//-----------------------------------------------------------------------------
 // Eatible item (food, drink, potion)
 enum ConsumableType
 {
@@ -358,17 +339,13 @@ enum ConsumableType
 };
 struct Consumable : public Item
 {
-	Consumable() : Item(IT_CONSUMABLE), effect(E_NONE), power(0), time(0), cons_type(Drink) {}
+	Consumable() : Item(IT_CONSUMABLE), time(0), cons_type(Drink) {}
 
-	bool IsHealingPotion() const
-	{
-		return effect == E_HEAL && cons_type == Potion;
-	}
+	bool IsHealingPotion() const { return is_healing_potion; }
 
-	ConsumeEffect effect;
-	float power, time;
+	float time;
 	ConsumableType cons_type;
-	EffectId ToEffect() const;
+	bool is_healing_potion;
 
 	static vector<Consumable*> consumables;
 };

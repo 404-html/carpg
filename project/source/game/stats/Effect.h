@@ -26,6 +26,9 @@ enum class EffectId
 	StaminaRegenerationMod, // multiple
 	MagicPower, // sum
 	Backstab, // sum
+	Heal, // consumable
+	Antidote, // consumable
+	GreenHair, // consumable
 
 	Max // max 127 values
 };

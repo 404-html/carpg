@@ -870,7 +870,7 @@ void Unit::ApplyItemEffects(const Item* item, ITEM_SLOT slot)
 		effect.power = e.power;
 		effect.source = EffectSource::Item;
 		effect.source_id = (int)slot;
-		effect.value = -1;
+		effect.value = e.value;
 		effect.time = 0.f;
 		AddEffect(effect);
 	}
@@ -887,114 +887,97 @@ void Unit::RemoveItemEffects(const Item* item, ITEM_SLOT slot)
 //=================================================================================================
 void Unit::ApplyConsumableEffect(const Consumable& item)
 {
-	switch(item.effect)
+	for(const ItemEffect& effect : item.effects)
 	{
-	case E_HEAL:
-		hp += item.power;
-		if(hp > hpmax)
-			hp = hpmax;
-		if(Net::IsOnline())
+		switch(effect.effect)
 		{
-			NetChange& c = Add1(Net::changes);
-			c.type = NetChange::UPDATE_HP;
-			c.unit = this;
-		}
-		break;
-	case E_POISON:
-	case E_ALCOHOL:
-		{
-			float poison_res = GetPoisonResistance();
-			if(poison_res > 0.f)
+		case EffectId::Heal:
+			hp += effect.power;
+			if(hp > hpmax)
+				hp = hpmax;
+			if(Net::IsOnline())
+			{
+				NetChange& c = Add1(Net::changes);
+				c.type = NetChange::UPDATE_HP;
+				c.unit = this;
+			}
+			break;
+		case EffectId::Poison:
+		case EffectId::Alcohol:
+			{
+				float poison_res = GetPoisonResistance();
+				if(poison_res > 0.f)
+				{
+					Effect e;
+					e.effect = effect.effect;
+					e.source = EffectSource::Temporary;
+					e.source_id = -1;
+					e.value = -1;
+					e.time = item.time;
+					e.power = effect.power / item.time * poison_res;
+					AddEffect(e);
+				}
+			}
+			break;
+		case EffectId::Antidote:
+			{
+				uint index = 0;
+				for(vector<Effect>::iterator it = effects.begin(), end = effects.end(); it != end; ++it, ++index)
+				{
+					if(it->effect == EffectId::Poison || it->effect == EffectId::Alcohol)
+						_to_remove.push_back(index);
+				}
+
+				RemoveEffects();
+
+				if(alcohol != 0.f)
+				{
+					alcohol = 0.f;
+					if(IsPlayer() && !player->is_local)
+						player->player_info->update_flags |= PlayerInfo::UF_ALCOHOL;
+				}
+			}
+			break;
+		case EffectId::FoodRegeneration:
 			{
 				Effect e;
-				e.effect = item.ToEffect();
+				e.effect = effect.effect;
+				e.source = EffectSource::Temporary;
+				e.source_id = -1;
+				e.value = -1;
+				e.time = effect.power;
+				e.power = 1.f;
+				AddEffect(e);
+			}
+			break;
+		case EffectId::GreenHair:
+			if(human_data)
+			{
+				human_data->hair_color = Vec4(0, 1, 0, 1);
+				if(Net::IsOnline())
+				{
+					NetChange& c = Add1(Net::changes);
+					c.type = NetChange::HAIR_COLOR;
+					c.unit = this;
+				}
+			}
+			break;
+		default:
+			if(item.time == 0.f && effect.effect == EffectId::Attribute)
+				player->Train(false, effect.value, TrainMode::Potion);
+			else
+			{
+				Effect e;
+				e.effect = effect.effect;
 				e.source = EffectSource::Temporary;
 				e.source_id = -1;
 				e.value = -1;
 				e.time = item.time;
-				e.power = item.power / item.time * poison_res;
+				e.power = effect.power;
 				AddEffect(e);
 			}
+			break;
 		}
-		break;
-	case E_REGENERATE:
-	case E_NATURAL:
-	case E_ANTIMAGIC:
-	case E_STAMINA:
-		{
-			Effect e;
-			e.effect = item.ToEffect();
-			e.source = EffectSource::Temporary;
-			e.source_id = -1;
-			e.value = -1;
-			e.time = item.time;
-			e.power = item.power;
-			AddEffect(e);
-		}
-		break;
-	case E_ANTIDOTE:
-		{
-			uint index = 0;
-			for(vector<Effect>::iterator it = effects.begin(), end = effects.end(); it != end; ++it, ++index)
-			{
-				if(it->effect == EffectId::Poison || it->effect == EffectId::Alcohol)
-					_to_remove.push_back(index);
-			}
-
-			RemoveEffects();
-
-			if(alcohol != 0.f)
-			{
-				alcohol = 0.f;
-				if(IsPlayer() && !player->is_local)
-					player->player_info->update_flags |= PlayerInfo::UF_ALCOHOL;
-			}
-		}
-		break;
-	case E_NONE:
-		break;
-	case E_STR:
-		if(IsPlayer())
-			player->Train(false, (int)AttributeId::STR, TrainMode::Potion);
-		break;
-	case E_END:
-		if(IsPlayer())
-			player->Train(false, (int)AttributeId::END, TrainMode::Potion);
-		break;
-	case E_DEX:
-		if(IsPlayer())
-			player->Train(false, (int)AttributeId::DEX, TrainMode::Potion);
-		break;
-	case E_FOOD:
-		{
-			Effect e;
-			e.effect = item.ToEffect();
-			e.source = EffectSource::Temporary;
-			e.source_id = -1;
-			e.value = -1;
-			e.time = item.power;
-			e.power = 1.f;
-			AddEffect(e);
-		}
-		break;
-	case E_GREEN_HAIR:
-		if(human_data)
-		{
-			human_data->hair_color = Vec4(0, 1, 0, 1);
-			if(Net::IsOnline())
-			{
-				NetChange& c = Add1(Net::changes);
-				c.type = NetChange::HAIR_COLOR;
-				c.unit = this;
-			}
-		}
-		break;
-	case E_STUN:
-		ApplyStun(item.time);
-		break;
-	default:
-		assert(0);
-		break;
 	}
 }
 
@@ -2747,19 +2730,20 @@ int Unit::FindHealingPotion() const
 			if(!pot.IsHealingPotion())
 				continue;
 
-			if(pot.power <= missing)
+			float power = pot.GetEffectPower(EffectId::Heal);
+			if(power <= missing)
 			{
-				if(pot.power > heal)
+				if(power > heal)
 				{
-					heal = pot.power;
+					heal = power;
 					id = index;
 				}
 			}
 			else
 			{
-				if(pot.power < heal2)
+				if(power < heal2)
 				{
-					heal2 = pot.power;
+					heal2 = power;
 					id2 = index;
 				}
 			}

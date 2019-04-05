@@ -1936,45 +1936,46 @@ void Game::UpdatePlayer(LevelContext& ctx, float dt)
 
 		if(GKey.KeyPressedReleaseAllowed(GK_POTION) && !Equal(u.hp, u.hpmax))
 		{
-			idle = false;
-			// wypij miksturkê lecznicz¹
-			float brakuje = u.hpmax - u.hp;
-			int wypij = -1, index = 0;
-			float wyleczy;
+			// drink healing potion
+			idle = false; FIXME;
+			float healed_hp,
+				missing_hp = u.hpmax - u.hp;
+			int potion_index = -1, index = 0;
 
 			for(vector<ItemSlot>::iterator it = u.items.begin(), end = u.items.end(); it != end; ++it, ++index)
 			{
 				if(!it->item || it->item->type != IT_CONSUMABLE)
 					continue;
 				const Consumable& pot = it->item->ToConsumable();
-				if(pot.effect == E_HEAL)
+				if(pot.IsHealingPotion())
 				{
-					if(wypij == -1)
+					float power = pot.GetEffectPower(EffectId::Heal);
+					if(potion_index == -1)
 					{
-						wypij = index;
-						wyleczy = pot.power;
+						potion_index = index;
+						healed_hp = power;
 					}
 					else
 					{
-						if(pot.power > brakuje)
+						if(power > missing_hp)
 						{
-							if(pot.power < wyleczy)
+							if(power < healed_hp)
 							{
-								wypij = index;
-								wyleczy = pot.power;
+								potion_index = index;
+								healed_hp = power;
 							}
 						}
-						else if(pot.power > wyleczy)
+						else if(power > healed_hp)
 						{
-							wypij = index;
-							wyleczy = pot.power;
+							potion_index = index;
+							healed_hp = power;
 						}
 					}
 				}
 			}
 
-			if(wypij != -1)
-				u.ConsumeItem(wypij);
+			if(potion_index != -1)
+				u.ConsumeItem(potion_index);
 			else
 				gui->messages->AddGameMsg3(GMS_NO_POTION);
 		}

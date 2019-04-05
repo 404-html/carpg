@@ -2204,7 +2204,7 @@ void InventoryPanel::ShareGiveItem(int index, uint count)
 		c.id = index;
 		c.count = count;
 	}
-	else if(item->type == IT_CONSUMABLE && item->ToConsumable().effect == E_HEAL)
+	else if(item->type == IT_CONSUMABLE && item->ToConsumable().IsHealingPotion())
 		unit->player->action_unit->ai->have_potion = 2;
 }
 
@@ -2243,7 +2243,7 @@ void InventoryPanel::ShareTakeItem(int index, uint count)
 		c.id = index;
 		c.count = count;
 	}
-	else if(item->type == IT_CONSUMABLE && item->ToConsumable().effect == E_HEAL)
+	else if(item->type == IT_CONSUMABLE && item->ToConsumable().IsHealingPotion())
 		unit->ai->have_potion = 1;
 }
 

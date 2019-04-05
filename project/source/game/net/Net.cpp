@@ -1159,7 +1159,7 @@ bool Game::ProcessControlMessageServer(BitStreamReader& f, PlayerInfo& info)
 							player.Train(TrainWhat::Trade, (float)price, 0);
 						}
 						else if(player.action == PlayerController::Action_ShareItems && slot.item->type == IT_CONSUMABLE
-							&& slot.item->ToConsumable().effect == E_HEAL)
+							&& slot.item->ToConsumable().IsHealingPotion())
 							player.action_unit->ai->have_potion = 1;
 						if(player.action != PlayerController::Action_LootChest && player.action != PlayerController::Action_LootContainer)
 						{
@@ -1299,7 +1299,7 @@ bool Game::ProcessControlMessageServer(BitStreamReader& f, PlayerInfo& info)
 						uint add_as_team = team_count;
 						if(player.action == PlayerController::Action_ShareItems)
 						{
-							if(slot.item->type == IT_CONSUMABLE && slot.item->ToConsumable().effect == E_HEAL)
+							if(slot.item->type == IT_CONSUMABLE && slot.item->ToConsumable().IsHealingPotion())
 								t->ai->have_potion = 2;
 						}
 						else if(player.action == PlayerController::Action_GiveItems)
@@ -1317,7 +1317,7 @@ bool Game::ProcessControlMessageServer(BitStreamReader& f, PlayerInfo& info)
 								t->gold -= price;
 								unit.gold += price;
 							}
-							if(slot.item->type == IT_CONSUMABLE && slot.item->ToConsumable().effect == E_HEAL)
+							if(slot.item->type == IT_CONSUMABLE && slot.item->ToConsumable().IsHealingPotion())
 								t->ai->have_potion = 2;
 						}
 						AddItem(*t, slot.item, count, add_as_team, false);

@@ -18,7 +18,6 @@ enum Group
 	G_ARMOR_TYPE,
 	G_ARMOR_UNIT_TYPE,
 	G_CONSUMABLE_TYPE,
-	G_CONSUMABLE_EFFECT,
 	G_OTHER_TYPE,
 	G_STOCK_KEYWORD,
 	G_BOOK_SCHEME_PROPERTY,
@@ -42,8 +41,6 @@ enum Property
 	P_MOBILITY,
 	P_UNIT_TYPE,
 	P_TEX_OVERRIDE,
-	P_CONSUMABLE_EFFECT,
-	P_POWER,
 	P_TIME,
 	P_SPEED,
 	P_SCHEME,
@@ -137,8 +134,6 @@ void ItemLoader::InitTokenizer()
 		{ "mobility", P_MOBILITY },
 		{ "unit_type", P_UNIT_TYPE },
 		{ "tex_override", P_TEX_OVERRIDE },
-		{ "effect", P_CONSUMABLE_EFFECT },
-		{ "power", P_POWER },
 		{ "time", P_TIME },
 		{ "speed", P_SPEED },
 		{ "scheme", P_SCHEME },
@@ -209,23 +204,6 @@ void ItemLoader::InitTokenizer()
 		{ "drink", (int)ConsumableType::Drink },
 		{ "food", (int)ConsumableType::Food },
 		{ "herb", (int)ConsumableType::Herb }
-		});
-
-	t.AddKeywords(G_CONSUMABLE_EFFECT, {
-		{ "heal", E_HEAL },
-		{ "regenerate", E_REGENERATE },
-		{ "natural", E_NATURAL },
-		{ "antidote", E_ANTIDOTE },
-		{ "poison", E_POISON },
-		{ "alcohol", E_ALCOHOL },
-		{ "str", E_STR },
-		{ "end", E_END },
-		{ "dex", E_DEX },
-		{ "antimagic", E_ANTIMAGIC },
-		{ "food", E_FOOD },
-		{ "green_hair", E_GREEN_HAIR },
-		{ "stamina", E_STAMINA },
-		{ "stun", E_STUN }
 		});
 
 	t.AddKeywords(G_OTHER_TYPE, {
@@ -339,7 +317,7 @@ void ItemLoader::ParseItem(ITEM_TYPE type, const string& id)
 		break;
 	case IT_CONSUMABLE:
 		item = new Consumable;
-		req |= BIT(P_CONSUMABLE_EFFECT) | BIT(P_TIME) | BIT(P_POWER) | BIT(P_TYPE);
+		req |= BIT(P_TIME) | BIT(P_TYPE) | BIT(P_EFFECTS);
 		break;
 	case IT_BOOK:
 		item = new Book;
@@ -533,17 +511,6 @@ void ItemLoader::ParseItem(ITEM_TYPE type, const string& id)
 					tex_o.push_back(TexId(t.MustGetString().c_str()));
 			}
 			break;
-		case P_CONSUMABLE_EFFECT:
-			item->ToConsumable().effect = (ConsumeEffect)t.MustGetKeywordId(G_CONSUMABLE_EFFECT);
-			break;
-		case P_POWER:
-			{
-				float power = t.MustGetNumberFloat();
-				if(power < 0.f)
-					t.Throw("Can't have negative power %g.", power);
-				item->ToConsumable().power = power;
-			}
-			break;
 		case P_TIME:
 			{
 				float time = t.MustGetNumberFloat();
@@ -585,9 +552,32 @@ void ItemLoader::ParseItem(ITEM_TYPE type, const string& id)
 				}
 				EffectId effect = (EffectId)t.MustGetKeywordId(G_EFFECT);
 				t.Next();
+				int effect_value;
+				EffectInfo& info = EffectInfo::effects[(int)effect];
+				if(info.value_type != EffectInfo::None)
+				{
+					const string& value = t.MustGetItem();
+					if(info.value_type == EffectInfo::Attribute)
+					{
+						Attribute* attrib = Attribute::Find(value);
+						if(!attrib)
+							t.Throw("Invalid attribute '%s' for effect '%s'.", value.c_str(), info.id);
+						effect_value = (int)attrib->attrib_id;
+					}
+					else
+					{
+						Skill* skill = Skill::Find(value);
+						if(!skill)
+							t.Throw("Invalid skill '%s' for effect '%s'.", value.c_str(), info.id);
+						effect_value = (int)skill->skill_id;
+					}
+					t.Next();
+				}
+				else
+					effect_value = -1;
 				float power = t.MustGetNumberFloat();
 				t.Next();
-				item->effects.push_back({ effect, power, on_attack });
+				item->effects.push_back({ effect, power, effect_value, on_attack });
 			}
 			break;
 		default:
@@ -625,7 +615,21 @@ void ItemLoader::ParseItem(ITEM_TYPE type, const string& id)
 		Ring::rings.push_back(static_cast<Ring*>(item_ptr));
 		break;
 	case IT_CONSUMABLE:
-		Consumable::consumables.push_back(static_cast<Consumable*>(item_ptr));
+		{
+			Consumable* consumable = static_cast<Consumable*>(item_ptr);
+			if(consumable->cons_type == Potion)
+			{
+				for(ItemEffect& e : consumable->effects)
+				{
+					if(e.effect == EffectId::Heal && e.power > 0.f)
+					{
+						consumable->is_healing_potion = true;
+						break;
+					}
+				}
+			}
+			Consumable::consumables.push_back(consumable);
+		}
 		break;
 	case IT_OTHER:
 		{
@@ -1183,6 +1187,7 @@ void ItemLoader::CalculateCrc()
 		crc.Update(item->value);
 		crc.Update(item->flags);
 		crc.Update(item->type);
+		crc.Update(item->effects);
 
 		switch(item->type)
 		{
@@ -1229,8 +1234,6 @@ void ItemLoader::CalculateCrc()
 		case IT_CONSUMABLE:
 			{
 				Consumable& c = item->ToConsumable();
-				crc.Update(c.effect);
-				crc.Update(c.power);
 				crc.Update(c.time);
 				crc.Update(c.cons_type);
 			}

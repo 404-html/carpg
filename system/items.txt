@@ -1545,10 +1545,11 @@ consumable p_nreg {
 	value 10
 	mesh "naturalny.qmsh"
 	type potion
-	effect natural
-	power 2
 	time 10
 	flags ground_mesh
+	effects {
+		natural_healing_mod 2
+	}
 }
 
 consumable p_nreg2 {
@@ -1556,10 +1557,11 @@ consumable p_nreg2 {
 	value 100
 	mesh "naturalny2.qmsh"
 	type potion
-	effect natural
-	power 2.5
 	time 30
 	flags ground_mesh
+	effects {
+		natural_healing_mod 2.5
+	}
 }
 
 consumable p_hp {
@@ -1567,9 +1569,10 @@ consumable p_hp {
 	value 25
 	mesh "mikstura_hp.qmsh"
 	type potion
-	effect heal
-	power 250
 	flags ground_mesh
+	effects {
+		heal 250
+	}
 }
 
 consumable p_hp2 {
@@ -1577,9 +1580,10 @@ consumable p_hp2 {
 	value 100
 	mesh "mikstura_hp2.qmsh"
 	type potion
-	effect heal
-	power 500
 	flags ground_mesh
+	effects {
+		heal 500
+	}
 }
 
 consumable p_hp3 {
@@ -1587,9 +1591,10 @@ consumable p_hp3 {
 	value 400
 	mesh "mikstura_hp3.qmsh"
 	type potion
-	effect heal
-	power 1000
 	flags ground_mesh
+	effects {
+		heal 1000
+	}
 }
 
 consumable p_reg {
@@ -1597,10 +1602,11 @@ consumable p_reg {
 	value 250
 	mesh "mikstura_reg.qmsh"
 	type potion
-	effect regenerate
-	power 5
 	time 360
 	flags ground_mesh
+	effects {
+		regeneration 5
+	}
 }
 
 consumable p_antidote {
@@ -1608,8 +1614,10 @@ consumable p_antidote {
 	value 50
 	mesh "antidotum.qmsh"
 	type potion
-	effect antidote
 	flags ground_mesh
+	effects {
+		antidote 0
+	}
 }
 
 consumable p_antimagic {
@@ -1617,10 +1625,11 @@ consumable p_antimagic {
 	value 200
 	mesh "mikstura_reg.qmsh"
 	type potion
-	effect antimagic
 	time 300
-	power 0.5
 	flags ground_mesh
+	effects {
+		magic_resistance 0.5
+	}
 }
 
 consumable p_str {
@@ -1628,8 +1637,10 @@ consumable p_str {
 	value 500
 	mesh "wodka.qmsh"
 	type potion
-	effect str
 	flags {not_shop not_chest not_alchemist ground_mesh}
+	effects {
+		attribute str 1
+	}
 }
 
 consumable p_end {
@@ -1637,8 +1648,10 @@ consumable p_end {
 	value 500
 	mesh "wodka.qmsh"
 	type potion
-	effect end
 	flags {not_shop not_chest not_alchemist ground_mesh}
+	effects {
+		attribute end 1
+	}
 }
 
 consumable p_dex {
@@ -1646,8 +1659,10 @@ consumable p_dex {
 	value 500
 	mesh "wodka.qmsh"
 	type potion
-	effect dex
 	flags {not_shop not_chest not_alchemist ground_mesh}
+	effects {
+		attribute dex 1
+	}
 }
 
 consumable q_magowie_potion {
@@ -1663,10 +1678,11 @@ consumable water {
 	value 1
 	mesh "woda.qmsh"
 	type drink
-	effect stamina
-	power 250
 	time 5
 	flags {not_alchemist ground_mesh}
+	effects {
+		stamina_regeneration 250
+	}
 }
 
 consumable beer {
@@ -1674,10 +1690,11 @@ consumable beer {
 	value 2
 	mesh "piwo.qmsh"
 	type drink
-	effect alcohol
-	power 75
 	time 1
 	flags {not_alchemist ground_mesh}
+	effects {
+		alcohol 75
+	}
 }
 
 consumable vodka {
@@ -1685,10 +1702,11 @@ consumable vodka {
 	value 10
 	mesh "wodka.qmsh"
 	type drink
-	effect alcohol
-	power 150
 	time 2
 	flags {not_alchemist ground_mesh}
+	effects {
+		alcohol 150
+	}
 }
 
 consumable spirit {
@@ -1696,10 +1714,11 @@ consumable spirit {
 	value 20
 	mesh "wodka.qmsh"
 	type drink
-	effect alcohol
-	power 300
 	time 4
 	flags {not_alchemist ground_mesh}
+	effects {
+		alcohol 300
+	}
 }
 
 consumable bread {
@@ -1707,9 +1726,10 @@ consumable bread {
 	value 5
 	mesh "chleb.qmsh"
 	type food
-	effect food
-	power 20
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 20
+	}
 }
 
 consumable meat {
@@ -1717,9 +1737,10 @@ consumable meat {
 	value 10
 	mesh "mieso.qmsh"
 	type food
-	effect food 
-	power 25
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 25
+	}
 }
 
 consumable raw_meat {
@@ -1727,9 +1748,10 @@ consumable raw_meat {
 	value 5
 	mesh "surowe_mieso.qmsh"
 	type food
-	effect food 
-	power 10
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 10
+	}
 }
 
 consumable sausage {
@@ -1737,9 +1759,10 @@ consumable sausage {
 	value 15
 	mesh "sausage.qmsh"
 	type food
-	effect food 
-	power 30
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 30
+	}
 }
 
 consumable fish_meat {
@@ -1747,9 +1770,10 @@ consumable fish_meat {
 	value 7
 	mesh "fish_meat.qmsh"
 	type food
-	effect food 
-	power 20
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 20
+	}
 }
 
 consumable fish {
@@ -1757,9 +1781,10 @@ consumable fish {
 	value 4
 	mesh "fish.qmsh"
 	type food
-	effect food 
-	power 10
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 10
+	}
 }
 
 consumable apple {
@@ -1767,9 +1792,10 @@ consumable apple {
 	value 3
 	mesh "jablko.qmsh"
 	type food
-	effect food 
-	power 15
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 15
+	}
 }
 
 consumable cheese {
@@ -1777,9 +1803,10 @@ consumable cheese {
 	value 8
 	mesh "ser.qmsh"
 	type food
-	effect food 
-	power 20
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 20
+	}
 }
 
 consumable honeycomb {
@@ -1787,9 +1814,10 @@ consumable honeycomb {
 	value 15
 	mesh "plaster_miodu.qmsh"
 	type food
-	effect food 
-	power 30
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 30
+	}
 }
 
 consumable rice {
@@ -1797,9 +1825,10 @@ consumable rice {
 	value 5
 	mesh "ryz.qmsh"
 	type food
-	effect food 
-	power 15
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 15
+	}
 }
 
 consumable soup {
@@ -1807,9 +1836,10 @@ consumable soup {
 	value 8
 	mesh "soup.qmsh"
 	type food
-	effect food 
-	power 20
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 20
+	}
 }
 
 consumable stew {
@@ -1817,9 +1847,10 @@ consumable stew {
 	value 14
 	mesh "stew.qmsh"
 	type food
-	effect food 
-	power 30
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 30
+	}
 }
 
 consumable mushroom {
@@ -1827,9 +1858,10 @@ consumable mushroom {
 	value 4
 	mesh "grzyb.qmsh"
 	type food
-	effect food 
-	power 10
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 10
+	}
 }
 
 consumable muffin {
@@ -1837,9 +1869,10 @@ consumable muffin {
 	value 20
 	mesh "muffin.qmsh"
 	type food
-	effect food 
-	power 50
 	flags {not_alchemist not_merchant ground_mesh}
+	effects {
+		food_regeneration 50
+	}
 }
 
 consumable healing_herb {
@@ -1847,9 +1880,10 @@ consumable healing_herb {
 	value 10
 	mesh "healing_herb.qmsh"
 	type herb
-	effect heal
-	power 100
 	flags {not_merchant ground_mesh alpha}
+	effects {
+		heal 100
+	}
 }
 
 consumable green_herb {
@@ -1857,8 +1891,10 @@ consumable green_herb {
 	value 50
 	mesh "green_herb.qmsh"
 	type herb
-	effect green_hair
 	flags {not_alchemist not_merchant ground_mesh alpha}
+	effects {
+		green_hair 0
+	}
 }
 
 consumable alchemist_herb {
