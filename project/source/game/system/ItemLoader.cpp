@@ -180,9 +180,6 @@ void ItemLoader::InitTokenizer()
 		{ "not_blacksmith", ITEM_NOT_BLACKSMITH },
 		{ "mage", ITEM_MAGE },
 		{ "dont_drop", ITEM_DONT_DROP },
-		{ "backstab", ITEM_BACKSTAB },
-		{ "magic_resistance10", ITEM_MAGIC_RESISTANCE_10 },
-		{ "magic_resistance25", ITEM_MAGIC_RESISTANCE_25 },
 		{ "ground_mesh", ITEM_GROUND_MESH },
 		{ "crystal_sound", ITEM_CRYSTAL_SOUND },
 		{ "important", ITEM_IMPORTANT },
@@ -580,11 +577,17 @@ void ItemLoader::ParseItem(ITEM_TYPE type, const string& id)
 			t.Next();
 			while(!t.IsSymbol('}'))
 			{
+				bool on_attack = false;
+				if(t.IsItem("on_attack"))
+				{
+					on_attack = true;
+					t.Next();
+				}
 				EffectId effect = (EffectId)t.MustGetKeywordId(G_EFFECT);
 				t.Next();
 				float power = t.MustGetNumberFloat();
 				t.Next();
-				item->effects.push_back({ effect, power });
+				item->effects.push_back({ effect, power, on_attack });
 			}
 			break;
 		default:

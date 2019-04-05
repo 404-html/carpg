@@ -863,6 +863,8 @@ void Unit::ApplyItemEffects(const Item* item, ITEM_SLOT slot)
 		return;
 	for(const ItemEffect& e : item->effects)
 	{
+		if(e.on_attack)
+			continue;
 		Effect effect;
 		effect.effect = e.effect;
 		effect.power = e.power;
@@ -1277,6 +1279,31 @@ float Unit::GetEffectMul(EffectId effect) const
 			}
 			else
 				value *= e.power;
+		}
+	}
+	return value * tmp_value_low * tmp_value_high;
+}
+
+//=================================================================================================
+float Unit::GetEffectMulInv(EffectId effect) const
+{
+	float value = 1.f,
+		tmp_value_low = 1.f,
+		tmp_value_high = 1.f;
+	for(const Effect& e : effects)
+	{
+		if(e.effect == effect)
+		{
+			float power = (1.f - e.power);
+			if(e.source == EffectSource::Temporary)
+			{
+				if(power > tmp_value_high)
+					tmp_value_high = power;
+				else if(power < tmp_value_low)
+					tmp_value_low = power;
+			}
+			else
+				value *= power;
 		}
 	}
 	return value * tmp_value_low * tmp_value_high;
@@ -3517,23 +3544,7 @@ float Unit::CalculateMagicResistance() const
 		mres = 0.5f;
 	else if(IS_SET(data->flags2, F2_MAGIC_RES25))
 		mres = 0.75f;
-	if(HaveArmor())
-	{
-		const Armor& a = GetArmor();
-		if(IS_SET(a.flags, ITEM_MAGIC_RESISTANCE_25))
-			mres *= 0.75f;
-		else if(IS_SET(a.flags, ITEM_MAGIC_RESISTANCE_10))
-			mres *= 0.9f;
-	}
-	if(HaveShield())
-	{
-		const Shield& s = GetShield();
-		if(IS_SET(s.flags, ITEM_MAGIC_RESISTANCE_25))
-			mres *= 0.75f;
-		else if(IS_SET(s.flags, ITEM_MAGIC_RESISTANCE_10))
-			mres *= 0.9f;
-	}
-	float effect_mres = GetEffectMul(EffectId::MagicResistance);
+	float effect_mres = GetEffectMulInv(EffectId::MagicResistance);
 	return mres * effect_mres;
 }
 
@@ -3542,7 +3553,25 @@ float Unit::GetPoisonResistance() const
 {
 	if(IS_SET(data->flags, F_POISON_RES))
 		return 0.f;
-	return GetEffectMul(EffectId::PoisonResistance);
+	return GetEffectMulInv(EffectId::PoisonResistance);
+}
+
+//=================================================================================================
+float Unit::GetBackstabMod(const Item* item) const
+{
+	float mod = 0.25f;
+	if(IS_SET(data->flags, F2_BACKSTAB))
+		mod += 0.25f;
+	if(item)
+	{
+		for(const ItemEffect& e : item->effects)
+		{
+			if(e.on_attack && e.effect == EffectId::Backstab)
+				mod += e.power;
+		}
+	}
+	mod += GetEffectSum(EffectId::Backstab);
+	return mod;
 }
 
 //=================================================================================================

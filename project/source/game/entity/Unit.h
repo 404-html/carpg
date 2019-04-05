@@ -599,6 +599,7 @@ public:
 	float CalculateMagicResistance() const;
 	float GetPoisonResistance() const;
 	int CalculateMagicPower() const { return (int)GetEffectSum(EffectId::MagicPower); }
+	float GetBackstabMod(const Item* item) const;
 
 	//-----------------------------------------------------------------------------
 	// EFFECTS
@@ -621,6 +622,7 @@ public:
 	uint RemoveEffects(EffectId effect, EffectSource source, int source_id, int value);
 	float GetEffectSum(EffectId effect) const;
 	float GetEffectMul(EffectId effect) const;
+	float GetEffectMulInv(EffectId effect) const;
 	float GetEffectMax(EffectId effect) const;
 	bool HaveEffect(EffectId effect) const;
 	void OnAddRemoveEffect(Effect& e);

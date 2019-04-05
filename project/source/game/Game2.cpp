@@ -4560,11 +4560,7 @@ void Game::UpdateUnits(LevelContext& ctx, float dt)
 					u.hitted = true;
 					Bullet& b = Add1(ctx.bullets);
 					b.level = u.level;
-					b.backstab = 0;
-					if(IS_SET(u.data->flags, F2_BACKSTAB))
-						++b.backstab;
-					if(IS_SET(u.GetBow().flags, ITEM_BACKSTAB))
-						++b.backstab;
+					b.backstab = u.GetBackstabMod(&u.GetBow());
 
 					if(u.human_data)
 						u.mesh_inst->SetupBones(&u.human_data->mat_scale[0]);
@@ -5602,13 +5598,7 @@ void Game::UpdateBullets(LevelContext& ctx, float dt)
 
 				// backstab bonus damage
 				float angle_dif = AngleDiff(it->rot.y, hitted->rot);
-				float backstab_mod;
-				if(it->backstab == 0)
-					backstab_mod = 0.25f;
-				if(it->backstab == 1)
-					backstab_mod = 0.5f;
-				else
-					backstab_mod = 0.75f;
+				float backstab_mod = it->backstab;
 				if(IS_SET(hitted->data->flags2, F2_BACKSTAB_RES))
 					backstab_mod /= 2;
 				m += angle_dif / PI * backstab_mod;
@@ -6216,11 +6206,7 @@ Game::ATTACK_RESULT Game::DoGenericAttack(LevelContext& ctx, Unit& attacker, Uni
 
 	// backstab bonus
 	float angle_dif = AngleDiff(Clip(attacker.rot + PI), hitted.rot);
-	float backstab_mod = 0.25f;
-	if(IS_SET(attacker.data->flags, F2_BACKSTAB))
-		backstab_mod += 0.25f;
-	if(attacker.HaveWeapon() && IS_SET(attacker.GetWeapon().flags, ITEM_BACKSTAB))
-		backstab_mod += 0.25f;
+	float backstab_mod = attacker.GetBackstabMod(bash ? attacker.slots[SLOT_SHIELD] : attacker.slots[SLOT_WEAPON]);
 	if(IS_SET(hitted.data->flags2, F2_BACKSTAB_RES))
 		backstab_mod /= 2;
 	m += angle_dif / PI * backstab_mod;
@@ -6393,7 +6379,7 @@ void Game::CastSpell(LevelContext& ctx, Unit& u)
 			Bullet& b = Add1(ctx.bullets);
 
 			b.level = u.level + u.CalculateMagicPower();
-			b.backstab = 0;
+			b.backstab = 0.25f;
 			b.pos = coord;
 			b.attack = float(spell.dmg);
 			b.rot = Vec3(0, current_rot + Random(-0.05f, 0.05f), 0);
@@ -7092,7 +7078,7 @@ void Game::UpdateTraps(LevelContext& ctx, float dt)
 					{
 						Bullet& b = Add1(ctx.bullets);
 						b.level = 4;
-						b.backstab = 0;
+						b.backstab = 0.25f;
 						b.attack = float(trap.base->attack);
 						b.mesh = aArrow;
 						b.pos = Vec3(2.f*trap.tile.x + trap.pos.x - float(int(trap.pos.x / 2) * 2) + Random(-trap.base->rw, trap.base->rw) - 1.2f*DirToPos(trap.dir).x,

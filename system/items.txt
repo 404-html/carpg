@@ -57,6 +57,9 @@ weapon dagger_assassin {
 	material metal
 	dmg_type pierce
 	flags hq
+	effects {
+		on_attack backstab 0.1
+	}
 }
 
 weapon dagger_sword_a {
@@ -80,7 +83,10 @@ weapon dagger_spinesheath {
 	type short_blade
 	material metal
 	dmg_type pierce
-	flags {not_chest not_shop not_random backstab unique}
+	flags {not_chest not_shop not_random unique}
+	effects {
+		on_attack backstab 0.25
+	}
 }
 
 weapon sword_wooden {
@@ -560,7 +566,10 @@ shield shield_adamantine {
 	block 160
 	req_str 45
 	material metal
-	flags {magic_resistance10 magical}
+	flags magical
+	effects {
+		magic_resistance 0.1
+	}
 }
 
 shield shield_wall {
@@ -570,7 +579,10 @@ shield shield_wall {
 	block 200
 	req_str 60
 	material rock
-	flags {not_shop not_chest not_random magic_resistance25 unique}
+	flags {not_shop not_chest not_random unique}
+	effects {
+		magic_resistance 0.25
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -662,7 +674,10 @@ armor al_dragonskin {
 	defense 165
 	req_str 35
 	mobility 80
-	flags {magic_resistance10 magical}
+	flags magical
+	effects {
+		magic_resistance 0.1
+	}
 }
 
 armor al_studded {
@@ -778,9 +793,10 @@ armor al_angelskin {
 	defense 180
 	req_str 20
 	mobility 100
-	flags {not_shop not_chest not_random magic_resistance25 unique}
+	flags {not_shop not_chest not_random unique}
 	effects {
 		magic_power 1
+		magic_resistance 0.25
 	}
 }
 
@@ -936,7 +952,10 @@ armor am_dragonscale {
 	defense 180
 	req_str 50
 	mobility 55
-	flags {magic_resistance10 magical}
+	flags magical
+	effects {
+		magic_resistance 0.1
+	}
 }
 
 armor am_breastplate {
@@ -1002,7 +1021,10 @@ armor am_breastplate_adam {
 	defense 170
 	req_str 50
 	mobility 70
-	flags {magic_resistance10 magical}
+	flags magical
+	effects {
+		magic_resistance 0.1
+	}
 }
 
 armor am_gladiator {
@@ -1015,7 +1037,10 @@ armor am_gladiator {
 	defense 200
 	req_str 45
 	mobility 75
-	flags {not_shop not_chest not_random unique magic_resistance10}
+	flags {not_shop not_chest not_random unique}
+	effects {
+		magic_resistance 0.1
+	}
 }
 
 armor ah_splint_rusted {
@@ -1093,7 +1118,10 @@ armor ah_antimage {
 	defense 130
 	req_str 55
 	mobility 55
-	flags {not_shop not_chest not_random unique magic_resistance25}
+	flags {not_shop not_chest not_random unique}
+	effects {
+		magic_resistance 0.33
+	}
 }
 
 armor ah_plate {
@@ -1159,7 +1187,10 @@ armor ah_plate_adam {
 	defense 185
 	req_str 40
 	mobility 40
-	flags {magic_resistance10 magical}
+	flags magical
+	effects {
+		magic_resistance 0.1
+	}
 }
 
 armor ah_black_armor {
@@ -1172,7 +1203,10 @@ armor ah_black_armor {
 	defense 220
 	req_str 75
 	mobility 40
-	flags {not_shop not_chest not_random magic_resistance25 unique}
+	flags {not_shop not_chest not_random unique}
+	effects {
+		magic_resistance 0.25
+	}
 }
 
 armor ah_crystal {
@@ -1198,7 +1232,10 @@ armor ah_crystal_m {
 	defense 195
 	req_str 80
 	mobility 25
-	flags {magic_resistance10 magical}
+	flags magical
+	effects {
+		magic_resistance 0.1
+	}
 }
 
 armor ah_blood_crystal {
@@ -1211,7 +1248,10 @@ armor ah_blood_crystal {
 	defense 210
 	req_str 80
 	mobility 25
-	flags {not_shop not_chest not_random magic_resistance10 magical}
+	flags {not_shop not_chest not_random magical}
+	effects {
+		magic_resistance 0.1
+	}
 }
 
 armor al_blacksmith {
@@ -1322,9 +1362,10 @@ armor al_mage2 {
 	defense 30
 	req_str 20
 	mobility 90
-	flags {not_shop not_chest mage magic_resistance10 magical}
+	flags {not_shop not_chest mage magical}
 	effects {
 		magic_power 2
+		magic_resistance 0.1
 	}
 }
 
@@ -1339,9 +1380,10 @@ armor al_mage3 {
 	defense 40
 	req_str 20
 	mobility 90
-	flags {not_shop not_chest mage magic_resistance10 magical}
+	flags {not_shop not_chest mage magical}
 	effects {
 		magic_power 3
+		magic_resistance 0.1
 	}
 }
 
@@ -1356,9 +1398,10 @@ armor al_mage4 {
 	defense 50
 	req_str 20
 	mobility 90
-	flags {not_shop not_chest mage magic_resistance25 unique}
+	flags {not_shop not_chest mage unique}
 	effects {
 		magic_power 4
+		magic_resistance 0.25
 	}
 }
 
@@ -1372,9 +1415,10 @@ armor al_necromancer {
 	defense 50
 	req_str 25
 	mobility 80
-	flags {not_shop not_chest magic_resistance10 magical}
+	flags {not_shop not_chest magical}
 	effects {
 		magic_power 2
+		magic_resistance 0.1
 	}
 }
 

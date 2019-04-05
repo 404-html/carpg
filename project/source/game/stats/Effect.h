@@ -25,6 +25,7 @@ enum class EffectId
 	Skill,
 	StaminaRegenerationMod, // multiple
 	MagicPower, // sum
+	Backstab, // sum
 
 	Max // max 127 values
 };

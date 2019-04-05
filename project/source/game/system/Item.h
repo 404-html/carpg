@@ -24,25 +24,17 @@ enum ITEM_FLAGS
 	ITEM_NOT_BLACKSMITH = 1 << 4,
 	ITEM_MAGE = 1 << 5,
 	ITEM_DONT_DROP = 1 << 6, // can't drop when in dialog
-	//ITEM_SECRET = 1 << 7, - removed
-	ITEM_BACKSTAB = 1 << 8,
-	//ITEM_POWER_1 = 1 << 9,
-	//ITEM_POWER_2 = 1 << 10,
-	//ITEM_POWER_3 = 1 << 11,
-	//ITEM_POWER_4 = 1 << 12,
-	ITEM_MAGIC_RESISTANCE_10 = 1 << 13,
-	ITEM_MAGIC_RESISTANCE_25 = 1 << 14,
-	ITEM_GROUND_MESH = 1 << 15, // when on ground is displayed as mesh not as bag
-	ITEM_CRYSTAL_SOUND = 1 << 16,
-	ITEM_IMPORTANT = 1 << 17, // drawn on map as gold bag in minimap, mark dead units with this item
-	ITEM_TEX_ONLY = 1 << 18,
-	ITEM_NOT_MERCHANT = 1 << 19,
-	ITEM_NOT_RANDOM = 1 << 20,
-	ITEM_HQ = 1 << 21, // high quality item icon
-	ITEM_MAGICAL = 1 << 23, // magic quality item icon
-	ITEM_UNIQUE = 1 << 24, // unique quality item icon
-	ITEM_ALPHA = 1 << 25, // item require alpha test
-	ITEM_MAGIC_SCROLL = 1 << 26,
+	ITEM_GROUND_MESH = 1 << 7, // when on ground is displayed as mesh not as bag
+	ITEM_CRYSTAL_SOUND = 1 << 8,
+	ITEM_IMPORTANT = 1 << 9, // drawn on map as gold bag in minimap, mark dead units with this item
+	ITEM_TEX_ONLY = 1 << 10,
+	ITEM_NOT_MERCHANT = 1 << 11,
+	ITEM_NOT_RANDOM = 1 << 12,
+	ITEM_HQ = 1 << 13, // high quality item icon
+	ITEM_MAGICAL = 1 << 14, // magic quality item icon
+	ITEM_UNIQUE = 1 << 15, // unique quality item icon
+	ITEM_ALPHA = 1 << 16, // item require alpha test
+	ITEM_MAGIC_SCROLL = 1 << 17
 };
 
 //-----------------------------------------------------------------------------
@@ -65,6 +57,7 @@ struct ItemEffect
 {
 	EffectId effect;
 	float power;
+	bool on_attack;
 };
 
 //-----------------------------------------------------------------------------
@@ -120,7 +113,6 @@ struct Item
 
 	float GetWeight() const { return float(weight) / 10; }
 	float GetWeightValue() const { return float(value) / weight; }
-	float GetEffectPower(EffectId effect) const;
 
 	void CreateCopy(Item& item) const;
 	Item* CreateCopy() const;

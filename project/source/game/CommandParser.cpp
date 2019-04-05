@@ -501,13 +501,15 @@ void CommandParser::ListStats(Unit* u)
 		u->GetEffectSum(EffectId::Regeneration), u->GetEffectMul(EffectId::NaturalHealingMod));
 	Msg("Stamina: %d/%d (bonus: %+g, regeneration: %+g/sec, mod: x%g)", (int)u->stamina, (int)u->stamina_max, u->GetEffectSum(EffectId::Stamina),
 		u->GetEffectMax(EffectId::StaminaRegeneration), u->GetEffectMul(EffectId::StaminaRegenerationMod));
-	Msg("Melee attack: %s (bonus: %+g), ranged: %s (bonus: %+g)",
+	Msg("Melee attack: %s (bonus: %+g, backstab: x%g), ranged: %s (bonus: %+g, backstab: x%g)",
 		(u->HaveWeapon() || u->data->type == UNIT_TYPE::ANIMAL) ? Format("%d", (int)u->CalculateAttack()) : "-",
 		u->GetEffectSum(EffectId::MeleeAttack),
+		u->GetBackstabMod(u->slots[SLOT_WEAPON]),
 		u->HaveBow() ? Format("%d", (int)u->CalculateAttack(&u->GetBow())) : "-",
-		u->GetEffectSum(EffectId::RangedAttack));
+		u->GetEffectSum(EffectId::RangedAttack),
+		u->GetBackstabMod(u->slots[SLOT_BOW]));
 	Msg("Defense %d (bonus: %+g), block: %s", (int)u->CalculateDefense(), u->GetEffectSum(EffectId::Defense),
-		u->HaveShield() ? Format("%d", (int)u->CalculateBlock()) : "");
+		u->HaveShield() ? Format("%d", (int)u->CalculateBlock()) : "-");
 	Msg("Mobility: %d (bonus %+g)", (int)u->CalculateMobility(), u->GetEffectSum(EffectId::Mobility));
 	Msg("Carry: %g/%g (mod: x%g)", float(u->weight) / 10, float(u->weight_max) / 10, u->GetEffectMul(EffectId::Carry));
 	Msg("Magic resistance: %d%%, magic power: %+d", (int)((1.f - u->CalculateMagicResistance()) * 100), u->CalculateMagicPower());
