@@ -888,8 +888,8 @@ void ItemLoader::ParseStock(const string& id)
 					int a = t.MustGetInt();
 					t.Next();
 					int b = t.MustGetInt();
-					if(a >= b || a < 1 || b < 1)
-						t.Throw("Invalid Random values (%d, %d).", a, b);
+					if(a >= b || a < 0 || b < 1)
+						t.Throw("Invalid random values (%d, %d).", a, b);
 					t.Next();
 
 					StockEntry type = SE_RANDOM;

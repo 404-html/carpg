@@ -135,7 +135,9 @@ void Stock::ParseInternal(vector<ItemSlot>& items)
 					++i;
 					StockEntry type = (StockEntry)code[i];
 					++i;
-					AddItems(items, type, code[i], (uint)Random(a, b), action == SE_SAME_RANDOM);
+					uint count = (uint)Random(a, b);
+					if(count > 0)
+						AddItems(items, type, code[i], count, action == SE_SAME_RANDOM);
 				}
 				else
 					i += 4;

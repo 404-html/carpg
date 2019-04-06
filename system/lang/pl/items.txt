@@ -596,84 +596,88 @@ item p_antimagic {
 
 //------------------------------------------------------------------------------
 // DRINK
-item potion_beer {
+item beer {
 	name "Piwo"
 	desc "Ma³a dawka trucizny podawana doustnie."
 }
-item potion_vodka {
+item vodka {
 	name "Wódka"
 	desc "Du¿a dawka trucizny podawana doustnie."
 }
-item potion_spirit {
+item spirit {
 	name "Spirytus"
 	desc "Bardzo du¿a dawka trucizny podawana doustnie."
 }
-item potion_water {
+item water {
 	name "Woda"
 	desc "Przywraca wytrzyma³oœæ."
+}
+item spring_water {
+	name "Woda Ÿródlana"
+	desc "OrzeŸwiaj¹ce!"
 }
 
 //------------------------------------------------------------------------------
 // FOOD
 item bread {
 	name "Chleb"
-	desc "Leczy 20 punktów zdrowia po zjedzeniu."
+	desc "Leczy 40 punktów zdrowia po zjedzeniu."
 }
 item meat {
 	name "Miêso"
-	desc "Leczy 25 punktów zdrowia po zjedzeniu."
+	desc "Leczy 50 punktów zdrowia po zjedzeniu."
 }
 item raw_meat {
 	name "Surowe miêso"
-	desc "Leczy 10 punktów zdrowia po zjedzeniu."
+	desc "Leczy 20 punktów zdrowia po zjedzeniu."
 }
 item sausage {
 	name "Kie³basa"
-	desc "Leczy 30 punktów zdrowia po zjedzeniu."
+	desc "Leczy 60 punktów zdrowia po zjedzeniu."
 }
 item fish_meat {
 	name "Miêso z ryby"
-	desc "Leczy 20 punktów zdrowia po zjedzeniu."
+	desc "Leczy 40 punktów zdrowia po zjedzeniu."
 }
 item fish {
 	name "Ryba"
-	desc "Leczy 10 punktów zdrowia po zjedzeniu."
+	desc "Leczy 15 punktów zdrowia po zjedzeniu."
 }
 item apple {
 	name "Jab³ko"
-	desc "Leczy 15 punktów zdrowia po zjedzeniu."
+	desc "Leczy 25 punktów zdrowia po zjedzeniu."
 }
 item cheese {
 	name "Ser"
-	desc "Leczy 20 punktów zdrowia po zjedzeniu."
+	desc "Leczy 40 punktów zdrowia po zjedzeniu."
 }
 item honeycomb {
 	name "Plaster miodu"
-	desc "Leczy 30 punktów zdrowia po zjedzeniu."
+	desc "Leczy 75 punktów zdrowia po zjedzeniu."
 }
 item rice {
 	name "Ry¿"
-	desc "Leczy 15 punktów zdrowia po zjedzeniu."
+	desc "Leczy 30 punktów zdrowia po zjedzeniu."
 }
 item soup {
 	name "Zupa"
-	desc "Leczy 20 punktów zdrowia po zjedzeniu."
+	desc "Leczy 45 punktów zdrowia po zjedzeniu."
 }
 item stew {
 	name "Gulasz"
-	desc "Leczy 30 punktów zdrowia po zjedzeniu."
+	desc "Leczy 60 punktów zdrowia po zjedzeniu."
 }
 item muffin {
 	name "Muffin"
-	desc "Leczy 50 punktów zdrowia po zjedzeniu."
+	desc "Leczy 100 punktów zdrowia po zjedzeniu."
 }
 item mushroom {
 	name "Grzyb"
-	desc "Leczy 10 punktów zdrowia po zjedzeniu."
+	desc "Leczy 15 punktów zdrowia po zjedzeniu."
 }
 item healing_herb {
 	name "Lecznicze ziele"
-	desc "Natychmiast leczy 100 punktów zdrowia."
+	desc "Natychmiast leczy 150 punktów zdrowia."
 }
 item green_herb {
 	name "Zielone ziele"

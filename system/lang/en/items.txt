@@ -596,84 +596,88 @@ item p_antimagic {
 
 //------------------------------------------------------------------------------
 // DRINK
-item potion_beer {
+item beer {
 	name "Beer"
 	desc "A small dose of poison for oral administration. Bottoms up."
 }
-item potion_vodka {
+item vodka {
 	name "Vodka"
 	desc "A big dose of poison for oral administration."
 }
-item potion_spirit {
+item spirit {
 	name "Spirit"
 	desc "A very big dose of poison for oral administration. Are you sure you don't want something lighter?"
 }
-item potion_water {
+item water {
 	name "Water"
 	desc "Restores stamina."
+}
+item spring_water {
+	name "Spring water"
+	desc "Refreshing!"
 }
 
 //------------------------------------------------------------------------------
 // FOOD
 item bread {
 	name "Bread"
-	desc "Heals 20 hit points after eating."
+	desc "Heals 40 hit points after eating."
 }
 item meat {
 	name "Meat"
-	desc "Heals 25 hit points after eating."
+	desc "Heals 50 hit points after eating."
 }
 item raw_meat {
 	name "Raw meat"
-	desc "Heals 10 hit points after eating."
+	desc "Heals 20 hit points after eating."
 }
 item sausage {
 	name "Sausage"
-	desc "Heals 30 hit points after eating."
+	desc "Heals 60 hit points after eating."
 }
 item fish_meat {
 	name "Fish meat"
-	desc "Heals 20 hit points after eating."
+	desc "Heals 40 hit points after eating."
 }
 item fish {
 	name "Fish"
-	desc "Heals 10 hit points after eating."
+	desc "Heals 15 hit points after eating."
 }
 item apple {
 	name "Apple"
-	desc "Heals 15 hit points after eating."
+	desc "Heals 25 hit points after eating."
 }
 item cheese {
 	name "Cheese"
-	desc "Heals 20 hit points after eating."
+	desc "Heals 40 hit points after eating."
 }
 item honeycomb {
 	name "Honeycomb"
-	desc "Heals 30 hit points after eating."
+	desc "Heals 75 hit points after eating."
 }
 item rice {
 	name "Rice"
-	desc "Heals 15 hit points after eating."
+	desc "Heals 30 hit points after eating."
 }
 item soup {
 	name "Soup"
-	desc "Heals 20 hit points after eating."
+	desc "Heals 45 hit points after eating."
 }
 item stew {
 	name "Stew"
-	desc "Heals 30 hit points after eating."
+	desc "Heals 60 hit points after eating."
 }
 item muffin {
 	name "Muffin"
-	desc "Heals 50 hit points after eating."
+	desc "Heals 100 hit points after eating."
 }
 item mushroom {
 	name "Mushroom"
-	desc "Heals 10 hit points after eating."
+	desc "Heals 15 hit points after eating."
 }
 item healing_herb {
 	name "Healing herb"
-	desc "Instantly heals 200 hit points."
+	desc "Instantly heals 150 hit points."
 }
 item green_herb {
 	name "Green herb"

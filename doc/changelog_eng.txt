@@ -8,6 +8,7 @@ Version 0.10 (2019-??-??):
 + new feat (energetic)
 + alchemist now buy herbs
 + rings: silver, golden, emerald
++ new item: spring water
 + update libraries: FMod 1.10.12, JSON for Modern C++ 3.6.1
 - fixed infinite wait time when using -delay switch
 

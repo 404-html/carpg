@@ -945,8 +945,8 @@ void Unit::ApplyConsumableEffect(const Consumable& item)
 				e.source = EffectSource::Temporary;
 				e.source_id = -1;
 				e.value = -1;
-				e.time = effect.power;
-				e.power = 1.f;
+				e.time = item.time;
+				e.power = effect.power / item.time;
 				AddEffect(e);
 			}
 			break;
@@ -1099,7 +1099,17 @@ void Unit::UpdateEffects(float dt)
 
 	// restore stamina
 	if(stamina_timer > 0)
+	{
 		stamina_timer -= dt;
+		if(best_stamina > 0.f)
+		{
+			stamina += best_stamina * dt * stamina_mod;
+			if(stamina > stamina_max)
+				stamina = stamina_max;
+			if(Net::IsServer() && player && !player->is_local)
+				player->player_info->update_flags |= PlayerInfo::UF_STAMINA;
+		}
+	}
 	else if(stamina != stamina_max && (stamina_action != SA_DONT_RESTORE || best_stamina > 0.f))
 	{
 		float stamina_restore;
@@ -3521,6 +3531,7 @@ Mesh::Animation* Unit::GetTakeWeaponAnimation(bool melee) const
 }
 
 //=================================================================================================
+// 0-immune, 0.5-resists 50%, 1-normal, 1.5-50% extra damage etc
 float Unit::CalculateMagicResistance() const
 {
 	float mres = 1.f;

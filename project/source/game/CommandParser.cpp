@@ -483,6 +483,11 @@ void CommandParser::ListPerks(PlayerController* pc)
 	Msg(s.c_str());
 }
 
+int ConvertResistance(float value)
+{
+	return (int)round((1.f - value) * 100);
+}
+
 void CommandParser::ListStats(Unit* u)
 {
 	int hp = int(u->hp);
@@ -504,16 +509,16 @@ void CommandParser::ListStats(Unit* u)
 	Msg("Melee attack: %s (bonus: %+g, backstab: x%g), ranged: %s (bonus: %+g, backstab: x%g)",
 		(u->HaveWeapon() || u->data->type == UNIT_TYPE::ANIMAL) ? Format("%d", (int)u->CalculateAttack()) : "-",
 		u->GetEffectSum(EffectId::MeleeAttack),
-		u->GetBackstabMod(u->slots[SLOT_WEAPON]),
+		1.f + u->GetBackstabMod(u->slots[SLOT_WEAPON]),
 		u->HaveBow() ? Format("%d", (int)u->CalculateAttack(&u->GetBow())) : "-",
 		u->GetEffectSum(EffectId::RangedAttack),
-		u->GetBackstabMod(u->slots[SLOT_BOW]));
+		1.f + u->GetBackstabMod(u->slots[SLOT_BOW]));
 	Msg("Defense %d (bonus: %+g), block: %s", (int)u->CalculateDefense(), u->GetEffectSum(EffectId::Defense),
 		u->HaveShield() ? Format("%d", (int)u->CalculateBlock()) : "-");
 	Msg("Mobility: %d (bonus %+g)", (int)u->CalculateMobility(), u->GetEffectSum(EffectId::Mobility));
 	Msg("Carry: %g/%g (mod: x%g)", float(u->weight) / 10, float(u->weight_max) / 10, u->GetEffectMul(EffectId::Carry));
-	Msg("Magic resistance: %d%%, magic power: %+d", (int)((1.f - u->CalculateMagicResistance()) * 100), u->CalculateMagicPower());
-	Msg("Poison resistance: %d%%", (int)((1.f - u->GetEffectMul(EffectId::PoisonResistance)) * 100));
+	Msg("Magic resistance: %d%%, magic power: %+d", ConvertResistance(u->CalculateMagicResistance()), u->CalculateMagicPower());
+	Msg("Poison resistance: %d%%", ConvertResistance(u->GetPoisonResistance()));
 	LocalString s = "Attributes: ";
 	for(int i = 0; i < (int)AttributeId::MAX; ++i)
 		s += Format("%s:%d ", Attribute::attributes[i].id, u->stats->attrib[i]);

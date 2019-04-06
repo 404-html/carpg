@@ -8,6 +8,7 @@ Wersja 0.10 (2019-??-??):
 + nowy atut (energiczny)
 + alchemik teraz skupuje zio³a
 + pierœcienie: srebrny, z³oty, szmaragdowy
++ nowy przedmiot: Ÿródlana woda
 + aktualizacja bibliotek: FMod 1.10.12, JSON for Modern C++ 3.6.1
 - naprawiony nieskoñczony czas oczekiwania przy u¿yciu opcji -delay
 

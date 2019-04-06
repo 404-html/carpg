@@ -339,7 +339,7 @@ enum ConsumableType
 };
 struct Consumable : public Item
 {
-	Consumable() : Item(IT_CONSUMABLE), time(0), cons_type(Drink) {}
+	Consumable() : Item(IT_CONSUMABLE), time(0), cons_type(Drink), is_healing_potion(false) {}
 
 	bool IsHealingPotion() const { return is_healing_potion; }
 

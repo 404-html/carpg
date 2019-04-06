@@ -1937,7 +1937,6 @@ void Game::UpdatePlayer(LevelContext& ctx, float dt)
 		if(GKey.KeyPressedReleaseAllowed(GK_POTION) && !Equal(u.hp, u.hpmax))
 		{
 			// drink healing potion
-			idle = false; FIXME;
 			float healed_hp,
 				missing_hp = u.hpmax - u.hp;
 			int potion_index = -1, index = 0;
@@ -1975,7 +1974,10 @@ void Game::UpdatePlayer(LevelContext& ctx, float dt)
 			}
 
 			if(potion_index != -1)
+			{
+				idle = false;
 				u.ConsumeItem(potion_index);
+			}
 			else
 				gui->messages->AddGameMsg3(GMS_NO_POTION);
 		}
@@ -3568,6 +3570,7 @@ Unit* Game::CreateUnit(UnitData& base, int level, Human* human_data, Unit* test_
 	u->CalculateStats();
 	u->hp = u->hpmax = u->CalculateMaxHp();
 	u->stamina = u->stamina_max = u->CalculateMaxStamina();
+	u->stamina_timer = 0;
 	u->fake_unit = false;
 
 	// items
