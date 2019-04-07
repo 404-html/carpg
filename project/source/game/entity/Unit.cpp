@@ -1655,7 +1655,7 @@ void Unit::Save(GameWriter& f, bool local)
 		f << alcohol;
 		f << raise_timer;
 
-		if(action == A_DASH)
+		if(action == A_DASH || action == A_ANIMATION2)
 			f << use_rot;
 
 		if(used_item)
@@ -2050,6 +2050,13 @@ void Unit::Load(GameReader& f, bool local)
 
 		if(action == A_DASH)
 			f >> use_rot;
+		else if(action == A_ANIMATION2)
+		{
+			if(LOAD_VERSION >= V_DEV)
+				f >> use_rot;
+			else
+				use_rot = 0.f;
+		}
 
 		const string& item_id = f.ReadString1();
 		if(!item_id.empty())
