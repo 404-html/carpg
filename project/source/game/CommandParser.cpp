@@ -521,13 +521,37 @@ void CommandParser::ListStats(Unit* u)
 	Msg("Poison resistance: %d%%", ConvertResistance(u->GetPoisonResistance()));
 	LocalString s = "Attributes: ";
 	for(int i = 0; i < (int)AttributeId::MAX; ++i)
-		s += Format("%s:%d ", Attribute::attributes[i].id, u->stats->attrib[i]);
+	{
+		int value = u->Get((AttributeId)i);
+		float bonus = 0;
+		for(Effect& e : u->effects)
+		{
+			if(e.effect == EffectId::Attribute && e.value == i)
+				bonus += e.power;
+		}
+		if(bonus == 0)
+			s += Format("%s:%d ", Attribute::attributes[i].id, value);
+		else
+			s += Format("%s:%d(%+g) ", Attribute::attributes[i].id, value, bonus);
+	}
 	Msg(s.c_str());
 	s = "Skills: ";
 	for(int i = 0; i < (int)SkillId::MAX; ++i)
 	{
-		if(u->stats->skill[i] > 0)
-			s += Format("%s:%d ", Skill::skills[i].id, u->stats->skill[i]);
+		int value = u->Get((SkillId)i, nullptr, false);
+		if(value > 0)
+		{
+			float bonus = 0;
+			for(Effect& e : u->effects)
+			{
+				if(e.effect == EffectId::Skill && e.value == i)
+					bonus += e.power;
+			}
+			if(bonus == 0)
+				s += Format("%s:%d ", Skill::skills[i].id, value);
+			else
+				s += Format("%s:%d(%+g)", Skill::skills[i].id, value, bonus);
+		}
 	}
 	Msg(s.c_str());
 }

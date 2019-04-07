@@ -752,7 +752,7 @@ public:
 	bool CanAct();
 
 	int Get(AttributeId a, StatState* state = nullptr) const;
-	int Get(SkillId s, StatState* state = nullptr) const;
+	int Get(SkillId s, StatState* state = nullptr, bool skill_bonus = true) const;
 	int GetBase(AttributeId a) const { return stats->attrib[(int)a]; }
 	int GetBase(SkillId s) const { return stats->skill[(int)s]; }
 	void Set(AttributeId a, int value);

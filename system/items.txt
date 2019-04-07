@@ -729,6 +729,9 @@ armor al_shadow {
 	req_str 30
 	mobility 85
 	flags {not_shop not_chest not_random unique}
+	effects {
+		backstab 0.1
+	}
 }
 
 armor al_chain_shirt {
@@ -797,6 +800,7 @@ armor al_angelskin {
 	effects {
 		magic_power 1
 		magic_resistance 0.25
+		regeneration 5
 	}
 }
 
@@ -842,13 +846,17 @@ armor am_troll_hide {
 	weight 12.5
 	value 2000
 	mesh "hide_armor.qmsh"
+	tex_override "troll_hide_armor.jpg"
 	type medium
 	unit_type human
 	material skin
 	defense 60
 	req_str 45
 	mobility 75
-	flags {not_shop not_chest not_random magical}
+	flags magical
+	effects {
+		regeneration 5
+	}
 }
 
 armor am_chainmail {
@@ -1040,6 +1048,7 @@ armor am_gladiator {
 	flags {not_shop not_chest not_random unique}
 	effects {
 		magic_resistance 0.1
+		melee_attack 25
 	}
 }
 
@@ -1516,6 +1525,86 @@ amulet a_diamond {
 	tex "amulet_diamond.png"
 }
 
+amulet a_food : a_silver {
+	value 750
+	flags magical
+	effects {
+		natural_healing_mod 1.5
+	}
+}
+
+amulet a_sprinter : a_silver {
+	value 750
+	flags magical
+	effects {
+		mobility 25
+	}
+}
+
+amulet a_mage : a_gold {
+	value 1500
+	flags magical
+	effects {
+		magic_power 2
+	}
+}
+
+amulet a_defense : a_gold {
+	value 1500
+	flags magical
+	effects {
+		defense 50
+	}
+}
+
+amulet a_stamina : a_gold {
+	value 1500
+	flags magical
+	effects {
+		stamina 100
+		stamina_regeneration_mod 1.25
+	}
+}
+
+amulet a_warrior : a_ruby {
+	value 3000
+	flags magical
+	effects {
+		attribute str 10
+		melee_attack 50
+		skill one_handed_weapon 20
+	}
+}
+
+amulet a_archer : a_ruby {
+	value 3000
+	flags magical
+	effects {
+		attribute dex 10
+		ranged_attack 50
+		skill bow 20
+	}
+}
+
+amulet a_antimagic : a_ruby {
+	value 3000
+	flags magical
+	effects {
+		magic_resistance 0.25
+	}
+}
+
+amulet a_health : a_diamond {
+	value 6000
+	flags magical
+	effects {
+		health 250
+		attribute end 10
+		regeneration 10
+		poison_resistance 0.25
+	}
+}
+
 //------------------------------------------------------------------------------
 // RINGS
 //------------------------------------------------------------------------------
@@ -1535,6 +1624,222 @@ ring r_emerald {
 	weight 0.1
 	value 150
 	tex "ring_emerald.png"
+}
+
+ring r_str : r_gold {
+	value 500
+	flags magical
+	effects {
+		attribute str 5
+	}
+}
+
+ring r_end : r_gold {
+	value 500
+	flags magical
+	effects {
+		attribute end 5
+	}
+}
+
+ring r_dex : r_gold {
+	value 500
+	flags magical
+	effects {
+		attribute dex 5
+	}
+}
+
+ring r_hp : r_gold {
+	value 500
+	flags magical
+	effects {
+		health 100
+	}
+}
+
+ring r_stamina : r_gold {
+	value 500
+	flags magical
+	effects {
+		stamina 50
+	}
+}
+
+ring r_def : r_gold {
+	value 500
+	flags magical
+	effects {
+		defense 15
+	}
+}
+
+ring r_attack : r_gold {
+	value 500
+	flags magical
+	effects {
+		melee_attack 15
+	}
+}
+
+ring r_ranged_attack : r_gold {
+	value 500
+	flags magical
+	effects {
+		ranged_attack 15
+	}
+}
+
+ring r_mage : r_gold {
+	value 500
+	flags magical
+	effects {
+		magic_power 1
+	}
+}
+
+ring r_one_handed_weapon : r_gold {
+	value 500
+	flags magical
+	effects {
+		skill one_handed_weapon 10
+	}
+}
+
+ring r_short_blade : r_gold {
+	value 500
+	flags magical
+	effects {
+		skill short_blade 10
+	}
+}
+
+ring r_long_blade : r_gold {
+	value 500
+	flags magical
+	effects {
+		skill long_blade 10
+	}
+}
+
+ring r_axe : r_gold {
+	value 500
+	flags magical
+	effects {
+		skill axe 10
+	}
+}
+
+ring r_blunt : r_gold {
+	value 500
+	flags magical
+	effects {
+		skill blunt 10
+	}
+}
+
+ring r_bow : r_gold {
+	value 500
+	flags magical
+	effects {
+		skill bow 10
+	}
+}
+
+ring r_shield : r_gold {
+	value 500
+	flags magical
+	effects {
+		skill shield 10
+	}
+}
+
+ring r_light_armor : r_gold {
+	value 500
+	flags magical
+	effects {
+		skill light_armor 10
+	}
+}
+
+ring r_medium_armor : r_gold {
+	value 500
+	flags magical
+	effects {
+		skill medium_armor 10
+	}
+}
+
+ring r_heavy_armor : r_gold {
+	value 500
+	flags magical
+	effects {
+		skill heavy_armor 10
+	}
+}
+
+ring r_haggle : r_gold {
+	value 500
+	flags magical
+	effects {
+		skill haggle 10
+	}
+}
+
+ring r_carry : r_gold {
+	value 500
+	flags magical
+	effects {
+		carry 1.5
+	}
+}
+
+ring r_str2 : r_emerald {
+	value 1500
+	flags magical
+	effects {
+		attribute str 15
+	}
+}
+
+ring r_end2 : r_emerald {
+	value 1500
+	flags magical
+	effects {
+		attribute end 15
+	}
+}
+
+ring r_dex2 : r_emerald {
+	value 1500
+	flags magical
+	effects {
+		attribute dex 15
+	}
+}
+
+ring r_regeneration : r_emerald {
+	value 1500
+	flags magical
+	effects {
+		regeneration 5
+	}
+}
+
+ring r_assassin : r_emerald {
+	value 1500
+	flags magical
+	effects {
+		backstab 0.25
+	}
+}
+
+ring r_poison_resistance : r_emerald {
+	value 1500
+	flags magical
+	effects {
+		poison_resistance 0.5
+	}
 }
 
 //------------------------------------------------------------------------------

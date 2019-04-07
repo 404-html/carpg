@@ -314,6 +314,7 @@ void ItemLoader::ParseItem(ITEM_TYPE type, const string& id)
 		break;
 	case IT_RING:
 		item = new Ring;
+		req |= BIT(P_EFFECTS);
 		break;
 	case IT_CONSUMABLE:
 		item = new Consumable;
@@ -556,21 +557,16 @@ void ItemLoader::ParseItem(ITEM_TYPE type, const string& id)
 				EffectInfo& info = EffectInfo::effects[(int)effect];
 				if(info.value_type != EffectInfo::None)
 				{
-					const string& value = t.MustGetItem();
 					if(info.value_type == EffectInfo::Attribute)
 					{
+						const string& value = t.MustGetItem();
 						Attribute* attrib = Attribute::Find(value);
 						if(!attrib)
 							t.Throw("Invalid attribute '%s' for effect '%s'.", value.c_str(), info.id);
 						effect_value = (int)attrib->attrib_id;
 					}
 					else
-					{
-						Skill* skill = Skill::Find(value);
-						if(!skill)
-							t.Throw("Invalid skill '%s' for effect '%s'.", value.c_str(), info.id);
-						effect_value = (int)skill->skill_id;
-					}
+						effect_value = t.MustGetKeywordId(G_SKILL);
 					t.Next();
 				}
 				else

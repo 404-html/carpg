@@ -1853,6 +1853,14 @@ void Unit::Load(GameReader& f, bool local)
 			stats->fixed = false;
 			stats->subprofile.value = 0;
 			stats->Load(f);
+			if(LOAD_VERSION < V_DEV)
+			{
+				for(int i = 0; i < (int)SkillId::MAX; ++i)
+				{
+					if(stats->skill[i] == -1)
+						stats->skill[i] = 0;
+				}
+			}
 		}
 		else
 		{
@@ -2121,6 +2129,15 @@ void Unit::Load(GameReader& f, bool local)
 			e.power = f.Read<float>();
 			e.source = EffectSource::Temporary;
 			e.source_id = -1;
+		}
+	}
+	if(content.require_update)
+	{
+		RemoveEffects(EffectId::None, EffectSource::Item, -1, -1);
+		for(int i = 0; i < SLOT_MAX; ++i)
+		{
+			if(slots[i])
+				ApplyItemEffects(slots[i], (ITEM_SLOT)i);
 		}
 	}
 
@@ -3591,7 +3608,7 @@ void Unit::RemoveEffects(bool send)
 	while(!_to_remove.empty())
 	{
 		uint index = _to_remove.back();
-		Effect& e = effects[index];
+		Effect e = effects[index];
 		if(send)
 		{
 			NetChangePlayer& c = Add1(player->player_info->changes);
@@ -3602,8 +3619,6 @@ void Unit::RemoveEffects(bool send)
 			c.a2 = e.value;
 		}
 
-		OnAddRemoveEffect(e);
-
 		_to_remove.pop_back();
 		if(index == effects.size() - 1)
 			effects.pop_back();
@@ -3612,6 +3627,8 @@ void Unit::RemoveEffects(bool send)
 			std::iter_swap(effects.begin() + index, effects.end() - 1);
 			effects.pop_back();
 		}
+
+		OnAddRemoveEffect(e);
 	}
 }
 
@@ -3694,10 +3711,11 @@ int Unit::Get(AttributeId a, StatState* state) const
 }
 
 //=================================================================================================
-int Unit::Get(SkillId s, StatState* state) const
+int Unit::Get(SkillId s, StatState* state, bool skill_bonus) const
 {
 	int index = (int)s;
-	int value = stats->skill[index];
+	int base = stats->skill[index];
+	int value = base;
 	StatInfo stat_info;
 
 	for(const Effect& e : effects)
@@ -3710,51 +3728,54 @@ int Unit::Get(SkillId s, StatState* state) const
 	}
 
 	// apply skill synergy
-	switch(s)
+	if(skill_bonus && base > 0)
 	{
-	case SkillId::LIGHT_ARMOR:
-	case SkillId::HEAVY_ARMOR:
+		switch(s)
 		{
-			int other_val = GetBase(SkillId::MEDIUM_ARMOR);
-			if(other_val > value)
-				value += (other_val - value) / 2;
+		case SkillId::LIGHT_ARMOR:
+		case SkillId::HEAVY_ARMOR:
+			{
+				int other_val = GetBase(SkillId::MEDIUM_ARMOR);
+				if(other_val > value)
+					value += (other_val - value) / 2;
+			}
+			break;
+		case SkillId::MEDIUM_ARMOR:
+			{
+				int other_val = max(GetBase(SkillId::LIGHT_ARMOR), GetBase(SkillId::HEAVY_ARMOR));
+				if(other_val > value)
+					value += (other_val - value) / 2;
+			}
+			break;
+		case SkillId::SHORT_BLADE:
+			{
+				int other_val = max(max(GetBase(SkillId::LONG_BLADE), GetBase(SkillId::BLUNT)), GetBase(SkillId::AXE));
+				if(other_val > value)
+					value += (other_val - value) / 2;
+			}
+			break;
+		case SkillId::LONG_BLADE:
+			{
+				int other_val = max(max(GetBase(SkillId::SHORT_BLADE), GetBase(SkillId::BLUNT)), GetBase(SkillId::AXE));
+				if(other_val > value)
+					value += (other_val - value) / 2;
+			}
+			break;
+		case SkillId::BLUNT:
+			{
+				int other_val = max(max(GetBase(SkillId::LONG_BLADE), GetBase(SkillId::SHORT_BLADE)), GetBase(SkillId::AXE));
+				if(other_val > value)
+					value += (other_val - value) / 2;
+			}
+			break;
+		case SkillId::AXE:
+			{
+				int other_val = max(max(GetBase(SkillId::LONG_BLADE), GetBase(SkillId::BLUNT)), GetBase(SkillId::SHORT_BLADE));
+				if(other_val > value)
+					value += (other_val - value) / 2;
+			}
+			break;
 		}
-		break;
-	case SkillId::MEDIUM_ARMOR:
-		{
-			int other_val = max(GetBase(SkillId::LIGHT_ARMOR), GetBase(SkillId::HEAVY_ARMOR));
-			if(other_val > value)
-				value += (other_val - value) / 2;
-		}
-		break;
-	case SkillId::SHORT_BLADE:
-		{
-			int other_val = max(max(GetBase(SkillId::LONG_BLADE), GetBase(SkillId::BLUNT)), GetBase(SkillId::AXE));
-			if(other_val > value)
-				value += (other_val - value) / 2;
-		}
-		break;
-	case SkillId::LONG_BLADE:
-		{
-			int other_val = max(max(GetBase(SkillId::SHORT_BLADE), GetBase(SkillId::BLUNT)), GetBase(SkillId::AXE));
-			if(other_val > value)
-				value += (other_val - value) / 2;
-		}
-		break;
-	case SkillId::BLUNT:
-		{
-			int other_val = max(max(GetBase(SkillId::LONG_BLADE), GetBase(SkillId::SHORT_BLADE)), GetBase(SkillId::AXE));
-			if(other_val > value)
-				value += (other_val - value) / 2;
-		}
-		break;
-	case SkillId::AXE:
-		{
-			int other_val = max(max(GetBase(SkillId::LONG_BLADE), GetBase(SkillId::BLUNT)), GetBase(SkillId::SHORT_BLADE));
-			if(other_val > value)
-				value += (other_val - value) / 2;
-		}
-		break;
 	}
 
 	if(state)

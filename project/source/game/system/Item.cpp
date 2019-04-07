@@ -93,6 +93,9 @@ Item& Item::operator = (const Item& i)
 			a.tex_override = a2.tex_override;
 		}
 		break;
+	case IT_AMULET:
+	case IT_RING:
+		break;
 	case IT_OTHER:
 		{
 			OtherItem& o = ToOther();
@@ -106,6 +109,7 @@ Item& Item::operator = (const Item& i)
 			const Consumable& c2 = i.ToConsumable();
 			c.time = c2.time;
 			c.cons_type = c2.cons_type;
+			c.is_healing_potion = c2.is_healing_potion;
 		}
 		break;
 	case IT_BOOK:

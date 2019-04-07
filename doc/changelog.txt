@@ -7,8 +7,8 @@ Wersja 0.10 (2019-??-??):
 + nowe efekty postaci: maksymalna wytrzyma³oœæ, szybkoœæ regeneracji wytrzyma³oœci, premia do atrybutu/umiejêtnoœci
 + nowy atut (energiczny)
 + alchemik teraz skupuje zio³a
-+ pierœcienie: srebrny, z³oty, szmaragdowy
-+ nowy przedmiot: Ÿródlana woda
++ pierœcienie: srebrny, z³oty, szmaragdowy, 27 magicznych pierœcieni
++ nowe przedmioty: Ÿródlana woda, pancerz ze skóry trolla, 9 magicznych amuletów
 + aktualizacja bibliotek: FMod 1.10.12, JSON for Modern C++ 3.6.1
 - naprawiony nieskoñczony czas oczekiwania przy u¿yciu opcji -delay
 

@@ -7,8 +7,8 @@ Version 0.10 (2019-??-??):
 + new unit effects: maximum stamina, stamina regeneration speed, attribute/skill bonus
 + new feat (energetic)
 + alchemist now buy herbs
-+ rings: silver, golden, emerald
-+ new item: spring water
++ rings: silver, golden, emerald, 27 magic rings
++ new item: spring water, troll hide armor, 9 magic amulets
 + update libraries: FMod 1.10.12, JSON for Modern C++ 3.6.1
 - fixed infinite wait time when using -delay switch
 
