@@ -2931,6 +2931,48 @@ leveled_list mage_armor {
 	al_mage3 10
 }
 
+leveled_list amulet {
+	a_food 9
+	a_sprinter 9
+	a_mage 12
+	a_defense 12
+	a_stamina 12
+	a_warrior 12
+	a_archer 15
+	a_antimagic 15
+	a_health 18
+}
+
+leveled_list ring {
+	r_str 8
+	r_end 8
+	r_dex 8
+	r_hp 8
+	r_stamina 8
+	r_def 8
+	r_attack 8
+	r_ranged_attack 8
+	r_mage 8
+	r_one_handed_weapon 8
+	r_short_blade 8
+	r_long_blade 8
+	r_axe 8
+	r_blunt 8
+	r_bow 8
+	r_shield 8
+	r_light_armor 8
+	r_medium_armor 8
+	r_heavy_armor 8
+	r_haggle 8
+	r_carry 8
+	r_str2 11
+	r_end2 11
+	r_dex2 11
+	r_regeneration 11
+	r_assassin 11
+	r_poison_resistance 11
+}
+
 //------------------------------------------------------------------------------
 // STOCK SCRIPTS
 //------------------------------------------------------------------------------

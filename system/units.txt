@@ -132,7 +132,12 @@ profile cleric {
 		tag one_handed_weapon
 		tag armor
 		tag shield
-		priority {weapon armor shield bow}
+		priority {
+			weapon 1
+			armor 1
+			shield 1
+			bow 0.5
+		}
 	}
 }
 
@@ -164,7 +169,12 @@ profile hunter {
 		tag light_armor
 		tag weapon
 		tag one_handed_weapon
-		priority {bow armor weapon shield}
+		priority {
+			bow 1
+			armor 0.9
+			weapon 0.75
+			shield 0.5
+		}
 		perk talent dexterity
 		perk skill_focus bow
 		items {
@@ -202,7 +212,12 @@ profile hunter {
 		tag one_handed_weapon
 		tag armor
 		tag bow
-		priority {weapon armor bow shield}
+		priority {
+			weapon 1
+			armor 0.9
+			bow 0.75
+			shield 0.6
+		}
 		perk talent dexterity
 		perk skill_focus weapon
 		items {
@@ -241,7 +256,12 @@ profile hunter {
 		tag one_handed_weapon
 		tag armor
 		tag shield
-		priority {weapon armor shield bow}
+		priority {
+			weapon 1
+			armor 1
+			shield 0.8
+			bow 0.5
+		}
 		perk talent endurance
 		perk skill_focus weapon
 		items {
@@ -320,7 +340,12 @@ profile rogue {
 		tag one_handed_weapon
 		tag armor
 		tag shield
-		priority {weapon armor shield bow}
+		priority {
+			weapon 1
+			armor 0.9
+			shield 0.8
+			bow 0.5
+		}
 		perk talent dexterity
 		perk skill_focus weapon
 		items {
@@ -357,7 +382,12 @@ profile rogue {
 		tag armor
 		tag weapon
 		tag one_handed_weapon
-		priority {bow armor weapon shield}
+		priority {
+			bow 1
+			armor 0.9
+			weapon 0.75
+			shield 0.5
+		}
 		perk talent dexterity
 		perk skill_focus bow
 		items {
@@ -417,7 +447,12 @@ profile warrior {
 		tag shield
 		tag weapon
 		tag one_handed_weapon
-		priority {armor shield weapon bow}
+		priority {
+			armor 1
+			shield 1
+			weapon 0.8
+			bow 0.5
+		}
 		perk talent endurance
 		perk skill_focus armor
 		items {
@@ -456,7 +491,12 @@ profile warrior {
 		tag one_handed_weapon
 		tag armor
 		tag shield
-		priority {weapon armor shield bow}
+		priority {
+			weapon 1
+			armor 1
+			shield 0.9
+			bow 0.5
+		}
 		perk talent strength
 		perk skill_focus weapon
 		items {
@@ -497,7 +537,12 @@ profile warrior {
 		tag one_handed_weapon
 		tag armor
 		tag bow
-		priority {weapon armor bow shield}
+		priority {
+			weapon 1
+			armor 0.9
+			bow 0.75
+			shield 0.75
+		}
 		perk talent strength
 		perk skill_focus weapon
 		items {
@@ -1964,10 +2009,19 @@ unit mage : base_human {
 		if level 13 {
 			chance 10 p_hp2
 			chance 9 magic_scroll
+			if chance 20 {
+				if chance 75 {
+					r_magic
+				}
+				else {
+					a_magic
+				}
+			}
 		}
 		else if level 9 {
 			chance 10 p_hp
 			chance 3 magic_scroll
+			chance 10 r_magic
 		}
 		else {
 			chance 5 p_hp
