@@ -20,7 +20,8 @@ public:
 	{
 		Unit* from, *to;
 		const Item* item;
-		int index, value, priority;
+		int index, priority;
+		float value;
 		bool is_team;
 	};
 
@@ -94,5 +95,7 @@ private:
 	// team shares, not saved
 	vector<TeamShareItem> team_shares;
 	int team_share_id;
+	// items to buy, not saved
+	vector<pair<const Item*, float>> to_buy;
 };
 extern TeamSingleton Team;

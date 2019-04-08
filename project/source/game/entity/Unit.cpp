@@ -1399,40 +1399,50 @@ float Unit::CalculateWeaponPros(const Weapon& weapon) const
 }
 
 //=================================================================================================
-bool Unit::IsBetterWeapon(const Weapon& weapon, int* value) const
+bool Unit::IsBetterWeapon(const Weapon& weapon, int* value, int* prev_value) const
 {
 	if(!HaveWeapon())
 	{
 		if(value)
+		{
 			*value = (int)CalculateWeaponPros(weapon);
+			*prev_value = 0;
+		}
 		return true;
 	}
 
 	if(value)
 	{
 		float v = CalculateWeaponPros(weapon);
+		float prev_v = CalculateWeaponPros(GetWeapon());
 		*value = (int)v;
-		return CalculateWeaponPros(GetWeapon()) < v;
+		*prev_value = (int)prev_v;
+		return prev_v < v;
 	}
 	else
 		return CalculateWeaponPros(GetWeapon()) < CalculateWeaponPros(weapon);
 }
 
 //=================================================================================================
-bool Unit::IsBetterArmor(const Armor& armor, int* value) const
+bool Unit::IsBetterArmor(const Armor& armor, int* value, int* prev_value) const
 {
 	if(!HaveArmor())
 	{
 		if(value)
+		{
 			*value = (int)CalculateDefense(&armor);
+			*prev_value = 0;
+		}
 		return true;
 	}
 
 	if(value)
 	{
 		float v = CalculateDefense(&armor);
+		float prev_v = CalculateDefense();
 		*value = (int)v;
-		return CalculateDefense() < v;
+		*prev_value = (int)v;
+		return prev_v < v;
 	}
 	else
 		return CalculateDefense() < CalculateDefense(&armor);
@@ -3414,68 +3424,65 @@ float Unit::GetBlockSpeed() const
 }
 
 //=================================================================================================
-bool Unit::IsBetterItem(const Item* item, int* value) const
+bool Unit::IsBetterItem(const Item* item, int* value, int* prev_value) const
 {
 	assert(item);
 
 	switch(item->type)
 	{
 	case IT_WEAPON:
-		if(!HaveWeapon())
-		{
-			if(value)
-				*value = item->value;
-			return true;
-		}
-		else if(!IS_SET(data->flags, F_MAGE))
-			return IsBetterWeapon(item->ToWeapon(), value);
+		if(!IS_SET(data->flags, F_MAGE))
+			return IsBetterWeapon(item->ToWeapon(), value, prev_value);
 		else
 		{
-			if(IS_SET(item->flags, ITEM_MAGE) && item->value > GetWeapon().value)
+			int v = item->ai_value;
+			int prev_v = HaveWeapon() ? GetWeapon().ai_value : 0;
+			if(value)
 			{
-				if(value)
-					*value = item->value;
-				return true;
+				*value = v;
+				*prev_value = prev_v;
 			}
-			else
-				return false;
+			return v > prev_v;
 		}
 	case IT_BOW:
-	case IT_SHIELD:
-	case IT_AMULET:
 		{
-			ITEM_SLOT slot_type = ItemTypeToSlot(item->type);
-			if(!slots[slot_type] || slots[slot_type]->value < item->value)
+			int v = item->ToBow().dmg;
+			int prev_v = HaveBow() ? GetBow().dmg : 0;
+			if(value)
 			{
-				if(value)
-					*value = item->value;
-				return true;
+				*value = v * 2;
+				*prev_value = prev_v * 2;
 			}
-			else
-				return false;
+			return v > prev_v;
+		}
+	case IT_SHIELD:
+		{
+			int v = item->ToShield().block;
+			int prev_v = HaveShield() ? GetShield().block : 0;
+			if(value)
+			{
+				*value = v * 2;
+				*prev_value = prev_v * 2;
+			}
+			return v > prev_v;
 		}
 	case IT_ARMOR:
 		if(!IS_SET(data->flags, F_MAGE))
-			return IsBetterArmor(item->ToArmor(), value);
+			return IsBetterArmor(item->ToArmor(), value, prev_value);
 		else
 		{
-			if(IS_SET(item->flags, ITEM_MAGE) && item->value > GetArmor().value)
+			int v = item->ai_value;
+			int prev_v = HaveArmor() ? GetArmor().ai_value : 0;
+			if(value)
 			{
-				if(value)
-					*value = item->value;
-				return true;
+				*value = v;
+				*prev_value = prev_v;
 			}
-			else
-				return false;
+			return v > prev_v;
 		}
 	case IT_RING:
-		if(!slots[SLOT_RING1] || !slots[SLOT_RING2] || slots[SLOT_RING1]->value < item->value || slots[SLOT_RING2]->value < item->value)
-		{
-			if(value)
-				*value = item->value;
-		}
-		else
-			return false;
+	case IT_AMULET:
+		return false;
 	default:
 		assert(0);
 		return false;

@@ -65,7 +65,8 @@ struct ItemEffect
 // Base item type
 struct Item
 {
-	explicit Item(ITEM_TYPE type) : type(type), weight(1), value(0), flags(0), mesh(nullptr), tex(nullptr), icon(nullptr), state(ResourceState::NotLoaded)
+	explicit Item(ITEM_TYPE type) : type(type), weight(1), value(0), ai_value(0), flags(0), mesh(nullptr), tex(nullptr), icon(nullptr),
+		state(ResourceState::NotLoaded)
 	{
 	}
 	virtual ~Item() {}
@@ -122,7 +123,7 @@ struct Item
 	void Rename(cstring name);
 
 	string id, mesh_id, name, desc;
-	int weight, value, flags, refid;
+	int weight, value, ai_value, flags, refid;
 	vector<ItemEffect> effects;
 	ITEM_TYPE type;
 	MeshPtr mesh;

@@ -33,12 +33,12 @@ struct StatProfile
 
 	struct Subprofile
 	{
-		static const ITEM_TYPE default_priorities[IT_MAX_WEARABLE];
+		static const float default_priorities[IT_MAX_WEARABLE];
 
 		string id;
 		int weapon_chance[WT_MAX], weapon_total, armor_chance[AT_MAX], armor_total;
 		SkillId tag_skills[MAX_TAGS];
-		ITEM_TYPE priorities[IT_MAX_WEARABLE];
+		float priorities[IT_MAX_WEARABLE];
 		TakenPerk perks[MAX_PERKS];
 		ItemScript* item_script;
 

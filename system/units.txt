@@ -309,6 +309,15 @@ profile mage {
 	shield 0
 	light_armor 10
 	haggle 0
+	
+	subprofile mage {
+		priority {
+			weapon 1
+			armor 1
+			shield 0.5
+			bow 0
+		}
+	}
 }
 
 profile rogue {

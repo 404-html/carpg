@@ -397,6 +397,7 @@ weapon wand_1 {
 	value 75
 	mesh "rozdzka1.qmsh"
 	attack 10
+	attraction 10
 	req_str 15
 	type blunt
 	material wood
@@ -412,6 +413,7 @@ weapon wand_2 {
 	value 150
 	mesh "rozdzka2.qmsh"
 	attack 15
+	attraction 90
 	req_str 15
 	type blunt
 	material wood
@@ -427,6 +429,7 @@ weapon wand_3 {
 	value 250
 	mesh "rozdzka3.qmsh"
 	attack 20
+	attraction 130
 	req_str 15
 	type blunt
 	material wood
@@ -1352,6 +1355,7 @@ armor al_mage {
 	unit_type human
 	material cloth
 	defense 20
+	attraction 10
 	req_str 20
 	mobility 90
 	flags {not_shop not_chest mage magical}
@@ -1369,6 +1373,7 @@ armor al_mage2 {
 	unit_type human
 	material cloth
 	defense 30
+	attraction 90
 	req_str 20
 	mobility 90
 	flags {not_shop not_chest mage magical}
@@ -1387,6 +1392,7 @@ armor al_mage3 {
 	unit_type human
 	material cloth
 	defense 40
+	attraction 130
 	req_str 20
 	mobility 90
 	flags {not_shop not_chest mage magical}
@@ -2853,8 +2859,8 @@ leveled_list blunt {
 
 leveled_list wand {
 	wand_1 1
-	wand_2 5
-	wand_3 10
+	wand_2 9
+	wand_3 13
 }
 
 leveled_list bow {
@@ -2895,6 +2901,7 @@ leveled_list medium_armor {
 	am_hide 1
 	am_hide_hq 2
 	am_hide_m 4
+	am_troll_hide 8
 	am_chainmail 2
 	am_chainmail_hq 3
 	am_chainmail_m 5
@@ -2927,8 +2934,8 @@ leveled_list heavy_armor {
 
 leveled_list mage_armor {
 	al_mage 1
-	al_mage2 5
-	al_mage3 10
+	al_mage2 9
+	al_mage3 13
 }
 
 leveled_list amulet {
@@ -3334,6 +3341,7 @@ better_items {
 	am_hide am_chainmail
 	am_hide_hq am_chainmail
 	am_hide_m am_breastplate
+	am_troll_hide am_breastplate_m
 	am_chainmail am_scale
 	am_chainmail_hq am_scale
 	am_chainmail_m am_breastplate_hq

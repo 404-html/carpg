@@ -359,9 +359,9 @@ struct Unit
 	Vec3 GetLootCenter() const;
 
 	float CalculateWeaponPros(const Weapon& weapon) const;
-	bool IsBetterWeapon(const Weapon& weapon, int* value = nullptr) const;
-	bool IsBetterArmor(const Armor& armor, int* value = nullptr) const;
-	bool IsBetterItem(const Item* item, int* value = nullptr) const;
+	bool IsBetterWeapon(const Weapon& weapon, int* value = nullptr, int* prev_value = nullptr) const;
+	bool IsBetterArmor(const Armor& armor, int* value = nullptr, int* prev_value = nullptr) const;
+	bool IsBetterItem(const Item* item, int* value = nullptr, int* prev_value = nullptr) const;
 	bool IsPlayer() const { return (player != nullptr); }
 	bool IsClient() const { return IsPlayer() && !player->IsLocal(); }
 	bool IsLocal() const { return IsPlayer() && player->IsLocal(); }

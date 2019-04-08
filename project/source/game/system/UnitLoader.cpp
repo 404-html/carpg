@@ -1156,7 +1156,7 @@ void UnitLoader::ParseSubprofile(Ptr<StatProfile::Subprofile>& subprofile)
 			break;
 		case SPK_PRIORITY:
 			{
-				int set = 0, index = 0;
+				int set = 0;
 				t.AssertSymbol('{');
 				t.Next();
 				while(!t.IsSymbol('}'))
@@ -1190,8 +1190,11 @@ void UnitLoader::ParseSubprofile(Ptr<StatProfile::Subprofile>& subprofile)
 					if(IS_SET(set, 1 << type))
 						t.Throw("Subprofile priority already set.");
 					set |= (1 << type);
-					subprofile->priorities[index] = type;
-					++index;
+					t.Next();
+					float value = t.MustGetNumberFloat();
+					if(value < 0.f)
+						t.Throw("Invalid subprofile priority %g.", value);
+					subprofile->priorities[type] = value;
 					t.Next();
 				}
 			}

@@ -5,7 +5,7 @@
 
 //-----------------------------------------------------------------------------
 vector<StatProfile*> StatProfile::profiles;
-const ITEM_TYPE StatProfile::Subprofile::default_priorities[IT_MAX_WEARABLE] = { IT_WEAPON, IT_BOW, IT_ARMOR, IT_SHIELD, IT_NONE, IT_NONE };
+const float StatProfile::Subprofile::default_priorities[IT_MAX_WEARABLE] = { 1.f, 1.f, 1.f, 1.f, 1.f, 1.f };
 
 //=================================================================================================
 StatProfile::Subprofile::Subprofile() : weapon_chance(), weapon_total(0), armor_chance(), armor_total(0), item_script(nullptr)

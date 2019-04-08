@@ -12,6 +12,7 @@ If equippable
 	If item have multiple slots:
 		Unit.AddItemAndEquipIfNone
 		Inventory.cpp
+	UnitStats default_priorities
 If need special texts in inventory:
 	ItemSlot.GetItemString
 If require special ordering:
