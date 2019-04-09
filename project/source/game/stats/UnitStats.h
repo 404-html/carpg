@@ -46,6 +46,7 @@ struct UnitStats
 	int attrib[(int)AttributeId::MAX];
 	int skill[(int)SkillId::MAX];
 	const float* priorities;
+	const float* tag_priorities;
 	SubprofileInfo subprofile;
 	bool fixed;
 

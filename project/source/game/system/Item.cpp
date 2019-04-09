@@ -94,7 +94,20 @@ Item& Item::operator = (const Item& i)
 		}
 		break;
 	case IT_AMULET:
+		{
+			Amulet& a = ToAmulet();
+			const Amulet& a2 = i.ToAmulet();
+			for(int i = 0; i < MAX_ITEM_TAGS; ++i)
+				a.tag[i] = a2.tag[i];
+		}
+		break;
 	case IT_RING:
+		{
+			Ring& r = ToRing();
+			const Ring& r2 = i.ToRing();
+			for(int i = 0; i < MAX_ITEM_TAGS; ++i)
+				r.tag[i] = r2.tag[i];
+		}
 		break;
 	case IT_OTHER:
 		{

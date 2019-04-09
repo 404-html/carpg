@@ -22,13 +22,15 @@ enum Group
 	G_STOCK_KEYWORD,
 	G_BOOK_SCHEME_PROPERTY,
 	G_SKILL,
-	G_EFFECT
+	G_EFFECT,
+	G_TAG
 };
 
 enum Property
 {
 	P_WEIGHT,
 	P_VALUE,
+	P_AI_VALUE,
 	P_MESH,
 	P_TEX,
 	P_ATTACK,
@@ -46,7 +48,8 @@ enum Property
 	P_SCHEME,
 	P_RUNIC,
 	P_BLOCK,
-	P_EFFECTS
+	P_EFFECTS,
+	P_TAG
 	// max 32 bits
 };
 
@@ -122,6 +125,7 @@ void ItemLoader::InitTokenizer()
 	t.AddKeywords(G_PROPERTY, {
 		{ "weight", P_WEIGHT },
 		{ "value", P_VALUE },
+		{ "ai_value", P_AI_VALUE },
 		{ "mesh", P_MESH },
 		{ "tex", P_TEX },
 		{ "attack", P_ATTACK },
@@ -139,7 +143,8 @@ void ItemLoader::InitTokenizer()
 		{ "scheme", P_SCHEME },
 		{ "runic", P_RUNIC },
 		{ "block", P_BLOCK },
-		{ "effects", P_EFFECTS }
+		{ "effects", P_EFFECTS },
+		{ "tag", P_TAG }
 		});
 
 	t.AddKeywords(G_WEAPON_TYPE, {
@@ -236,6 +241,16 @@ void ItemLoader::InitTokenizer()
 
 	for(int i = 0; i < (int)EffectId::Max; ++i)
 		t.AddKeyword(EffectInfo::effects[i].id, i, G_EFFECT);
+
+	t.AddKeywords(G_TAG, {
+		{ "str", TAG_STR },
+		{ "dex", TAG_DEX },
+		{ "melee", TAG_MELEE },
+		{ "ranged", TAG_RANGED },
+		{ "def", TAG_DEF },
+		{ "stamina", TAG_STAMINA },
+		{ "mage", TAG_MAGE }
+		});
 }
 
 //=================================================================================================
@@ -288,7 +303,7 @@ void ItemLoader::ParseItem(ITEM_TYPE type, const string& id)
 		t.Throw("Id must be unique.");
 
 	// create
-	int req = BIT(P_WEIGHT) | BIT(P_VALUE) | BIT(P_MESH) | BIT(P_TEX) | BIT(P_FLAGS);
+	int req = BIT(P_WEIGHT) | BIT(P_VALUE) | BIT(P_AI_VALUE) | BIT(P_MESH) | BIT(P_TEX) | BIT(P_FLAGS);
 	Ptr<Item> item(nullptr);
 	switch(type)
 	{
@@ -310,11 +325,11 @@ void ItemLoader::ParseItem(ITEM_TYPE type, const string& id)
 		break;
 	case IT_AMULET:
 		item = new Amulet;
-		req |= BIT(P_EFFECTS);
+		req |= BIT(P_EFFECTS) | BIT(P_TAG);
 		break;
 	case IT_RING:
 		item = new Ring;
-		req |= BIT(P_EFFECTS);
+		req |= BIT(P_EFFECTS) | BIT(P_TAG);
 		break;
 	case IT_CONSUMABLE:
 		item = new Consumable;
@@ -376,6 +391,11 @@ void ItemLoader::ParseItem(ITEM_TYPE type, const string& id)
 			item->value = t.MustGetInt();
 			if(item->value < 0)
 				t.Throw("Can't have negative value %d.", item->value);
+			break;
+		case P_AI_VALUE:
+			item->ai_value = t.MustGetInt();
+			if(item->value < 0)
+				t.Throw("Can't have negative ai value %d.", item->ai_value);
 			break;
 		case P_MESH:
 			if(IS_SET(item->flags, ITEM_TEX_ONLY))
@@ -559,7 +579,7 @@ void ItemLoader::ParseItem(ITEM_TYPE type, const string& id)
 				{
 					if(info.value_type == EffectInfo::Attribute)
 					{
-						const string& value = t.MustGetItem();
+						const string& value = t.MustGetItemKeyword();
 						Attribute* attrib = Attribute::Find(value);
 						if(!attrib)
 							t.Throw("Invalid attribute '%s' for effect '%s'.", value.c_str(), info.id);
@@ -574,6 +594,32 @@ void ItemLoader::ParseItem(ITEM_TYPE type, const string& id)
 				float power = t.MustGetNumberFloat();
 				t.Next();
 				item->effects.push_back({ effect, power, effect_value, on_attack });
+			}
+			break;
+		case P_TAG:
+			{
+				ItemTag* tags;
+				if(item->type == IT_AMULET)
+					tags = item->ToAmulet().tag;
+				else
+					tags = item->ToRing().tag;
+				for(int i = 0; i < MAX_ITEM_TAGS; ++i)
+					tags[i] = TAG_NONE;
+				if(t.IsSymbol('{'))
+				{
+					t.Next();
+					int index = 0;
+					while(!t.IsSymbol('}'))
+					{
+						if(index >= MAX_ITEM_TAGS)
+							t.Throw("Too many item tags.");
+						tags[index] = (ItemTag)t.MustGetKeywordId(G_TAG);
+						++index;
+						t.Next();
+					}
+				}
+				else
+					tags[0] = (ItemTag)t.MustGetKeywordId(G_TAG);
 			}
 			break;
 		default:
@@ -1178,6 +1224,8 @@ void ItemLoader::CalculateCrc()
 		Item* item = it.second;
 
 		crc.Update(item->id);
+		crc.Update(item->value);
+		crc.Update(item->ai_value);
 		crc.Update(item->mesh_id);
 		crc.Update(item->weight);
 		crc.Update(item->value);
@@ -1227,6 +1275,18 @@ void ItemLoader::CalculateCrc()
 					crc.Update(t.id);
 			}
 			break;
+		case IT_AMULET:
+			{
+				Amulet& a = item->ToAmulet();
+				crc.Update(a.tag);
+			}
+			break;
+		case IT_RING:
+			{
+				Ring& r = item->ToRing();
+				crc.Update(r.tag);
+			}
+			break;
 		case IT_CONSUMABLE:
 			{
 				Consumable& c = item->ToConsumable();
@@ -1247,8 +1307,6 @@ void ItemLoader::CalculateCrc()
 			}
 			break;
 		case IT_GOLD:
-		case IT_AMULET:
-		case IT_RING:
 			break;
 		default:
 			assert(0);

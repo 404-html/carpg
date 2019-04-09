@@ -1107,7 +1107,7 @@ void InventoryPanel::Update(float dt)
 				if(slot)
 				{
 					// nie za³o¿ony przedmiot
-					if(t->CanWear(item) && item->type != IT_AMULET && item->type != IT_RING)
+					if(t->CanWear(item))
 					{
 						last_index = INDEX_INVALID;
 

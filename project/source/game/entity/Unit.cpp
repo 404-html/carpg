@@ -3424,9 +3424,12 @@ float Unit::GetBlockSpeed() const
 }
 
 //=================================================================================================
-bool Unit::IsBetterItem(const Item* item, int* value, int* prev_value) const
+bool Unit::IsBetterItem(const Item* item, int* value, int* prev_value, ITEM_SLOT* target_slot) const
 {
 	assert(item);
+
+	if(target_slot)
+		*target_slot = ItemTypeToSlot(item->type);
 
 	switch(item->type)
 	{
@@ -3480,13 +3483,83 @@ bool Unit::IsBetterItem(const Item* item, int* value, int* prev_value) const
 			}
 			return v > prev_v;
 		}
-	case IT_RING:
 	case IT_AMULET:
-		return false;
+		{
+			float v = GetItemAiValue(item);
+			float prev_v = HaveAmulet() ? GetItemAiValue(&GetAmulet()) : 0;
+			if(value)
+			{
+				*value = (int)v;
+				*prev_value = (int)prev_v;
+			}
+			return v > prev_v && v > 0;
+		}
+	case IT_RING:
+		{
+			float v = GetItemAiValue(item);
+			float prev_v;
+			ITEM_SLOT best_slot;
+			if(!slots[SLOT_RING1])
+			{
+				prev_v = 0;
+				best_slot = SLOT_RING1;
+			}
+			else if(!slots[SLOT_RING2])
+			{
+				prev_v = 0;
+				best_slot = SLOT_RING2;
+			}
+			else
+			{
+				float prev_v1 = GetItemAiValue(slots[SLOT_RING1]),
+					prev_v2 = GetItemAiValue(slots[SLOT_RING2]);
+				if(prev_v1 > prev_v2)
+				{
+					prev_v = prev_v2;
+					best_slot = SLOT_RING2;
+				}
+				else
+				{
+					prev_v = prev_v1;
+					best_slot = SLOT_RING1;
+				}
+			}
+			if(value)
+			{
+				*value = (int)v;
+				*prev_value = (int)prev_v;
+			}
+			if(target_slot)
+				*target_slot = best_slot;
+			return v > prev_v && v > 0;
+		}
 	default:
 		assert(0);
 		return false;
 	}
+}
+
+//=================================================================================================
+float Unit::GetItemAiValue(const Item* item) const
+{
+	assert(Any(item->type, IT_AMULET, IT_RING)); // TODO
+
+	const float* priorities = stats->tag_priorities;
+	const ItemTag* tags;
+	if(item->type == IT_AMULET)
+		tags = item->ToAmulet().tag;
+	else
+		tags = item->ToRing().tag;
+
+	float value = (float)item->ai_value;
+	for(int i = 0; i < MAX_ITEM_TAGS; ++i)
+	{
+		if(tags[i] == TAG_NONE)
+			break;
+		value *= priorities[tag[i]];
+	}
+
+	return value;
 }
 
 //=================================================================================================
@@ -5106,129 +5179,17 @@ void Unit::UpdateInventory(bool notify)
 		if(!it->item || it->team_count != 0)
 			continue;
 
-		switch(it->item->type)
+		ITEM_SLOT target_slot;
+		if(IsBetterItem(it->item, nullptr, nullptr, &target_slot))
 		{
-		case IT_WEAPON:
-			if(!HaveWeapon())
+			if(slots[target_slot])
+				std::swap(slots[target_slot], it->item);
+			else
 			{
-				slots[SLOT_WEAPON] = it->item;
+				slots[target_slot] = it->item;
 				it->item = nullptr;
-				changes = true;
 			}
-			else if(IS_SET(data->flags, F_MAGE))
-			{
-				if(IS_SET(it->item->flags, ITEM_MAGE))
-				{
-					if(IS_SET(GetWeapon().flags, ITEM_MAGE))
-					{
-						if(GetWeapon().value < it->item->value)
-						{
-							std::swap(slots[SLOT_WEAPON], it->item);
-							changes = true;
-						}
-					}
-					else
-					{
-						std::swap(slots[SLOT_WEAPON], it->item);
-						changes = true;
-					}
-				}
-				else
-				{
-					if(!IS_SET(GetWeapon().flags, ITEM_MAGE) && IsBetterWeapon(it->item->ToWeapon()))
-					{
-						std::swap(slots[SLOT_WEAPON], it->item);
-						changes = true;
-					}
-				}
-			}
-			else if(IsBetterWeapon(it->item->ToWeapon()))
-			{
-				std::swap(slots[SLOT_WEAPON], it->item);
-				changes = true;
-			}
-			break;
-		case IT_BOW:
-			if(!HaveBow())
-			{
-				slots[SLOT_BOW] = it->item;
-				it->item = nullptr;
-				changes = true;
-			}
-			else if(GetBow().value < it->item->value)
-			{
-				std::swap(slots[SLOT_BOW], it->item);
-				changes = true;
-			}
-			break;
-		case IT_ARMOR:
-			if(!HaveArmor())
-			{
-				slots[SLOT_ARMOR] = it->item;
-				it->item = nullptr;
-				changes = true;
-			}
-			else if(IS_SET(data->flags, F_MAGE))
-			{
-				if(IS_SET(it->item->flags, ITEM_MAGE))
-				{
-					if(IS_SET(GetArmor().flags, ITEM_MAGE))
-					{
-						if(it->item->value > GetArmor().value)
-						{
-							std::swap(slots[SLOT_ARMOR], it->item);
-							changes = true;
-						}
-					}
-					else
-					{
-						std::swap(slots[SLOT_ARMOR], it->item);
-						changes = true;
-					}
-				}
-				else
-				{
-					if(!IS_SET(GetArmor().flags, ITEM_MAGE) && IsBetterArmor(it->item->ToArmor()))
-					{
-						std::swap(slots[SLOT_ARMOR], it->item);
-						changes = true;
-					}
-				}
-			}
-			else if(IsBetterArmor(it->item->ToArmor()))
-			{
-				std::swap(slots[SLOT_ARMOR], it->item);
-				changes = true;
-			}
-			break;
-		case IT_SHIELD:
-			if(!HaveShield())
-			{
-				slots[SLOT_SHIELD] = it->item;
-				it->item = nullptr;
-				changes = true;
-			}
-			else if(GetShield().value < it->item->value)
-			{
-				std::swap(slots[SLOT_SHIELD], it->item);
-				changes = true;
-			}
-			break;
-		case IT_AMULET:
-			if(!HaveAmulet())
-			{
-				slots[SLOT_AMULET] = it->item;
-				it->item = nullptr;
-				changes = true;
-			}
-			else if(GetAmulet().value < it->item->value)
-			{
-				std::swap(slots[SLOT_AMULET], it->item);
-				changes = true;
-			}
-			break;
-		default:
-			break;
+			changes = true;
 		}
 	}
 

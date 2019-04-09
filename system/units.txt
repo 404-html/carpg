@@ -138,6 +138,15 @@ profile cleric {
 			shield 1
 			bow 0.5
 		}
+		tags {
+			str 1
+			dex 1
+			melee 1
+			ranged 1
+			def 1
+			stamina 1
+			mage 0
+		}
 	}
 }
 
@@ -174,6 +183,15 @@ profile hunter {
 			armor 0.9
 			weapon 0.75
 			shield 0.5
+		}
+		tags {
+			str 1
+			dex 2
+			melee 1
+			ranged 2
+			def 1
+			stamina 1.5
+			mage 0
 		}
 		perk talent dexterity
 		perk skill_focus bow
@@ -218,6 +236,15 @@ profile hunter {
 			bow 0.75
 			shield 0.6
 		}
+		tags {
+			str 1
+			dex 2
+			melee 2
+			ranged 1
+			def 1.2
+			stamina 1.5
+			mage 0
+		}
 		perk talent dexterity
 		perk skill_focus weapon
 		items {
@@ -261,6 +288,15 @@ profile hunter {
 			armor 1
 			shield 0.8
 			bow 0.5
+		}
+		tags {
+			str 1.5
+			dex 1
+			melee 2
+			ranged 1
+			def 1.5
+			stamina 1.5
+			mage 0
 		}
 		perk talent endurance
 		perk skill_focus weapon
@@ -311,11 +347,22 @@ profile mage {
 	haggle 0
 	
 	subprofile mage {
+		weapon short_blade
+		armor light_armor
 		priority {
 			weapon 1
 			armor 1
 			shield 0.5
 			bow 0
+		}
+		tags {
+			str 1
+			dex 1
+			melee 0
+			ranged 0
+			def 1.5
+			stamina 1
+			mage 3
 		}
 	}
 }
@@ -354,6 +401,15 @@ profile rogue {
 			armor 0.9
 			shield 0.8
 			bow 0.5
+		}
+		tags {
+			str 1
+			dex 2
+			melee 2
+			ranged 1
+			def 1
+			stamina 1.5
+			mage 0
 		}
 		perk talent dexterity
 		perk skill_focus weapon
@@ -396,6 +452,15 @@ profile rogue {
 			armor 0.9
 			weapon 0.75
 			shield 0.5
+		}
+		tags {
+			str 1
+			dex 2
+			melee 1
+			ranged 2
+			def 1
+			stamina 1.5
+			mage 0
 		}
 		perk talent dexterity
 		perk skill_focus bow
@@ -462,6 +527,15 @@ profile warrior {
 			weapon 0.8
 			bow 0.5
 		}
+		tags {
+			str 1
+			dex 0.5
+			melee 1
+			ranged 0.5
+			def 2
+			stamina 1
+			mage 0
+		}
 		perk talent endurance
 		perk skill_focus armor
 		items {
@@ -505,6 +579,15 @@ profile warrior {
 			armor 1
 			shield 0.9
 			bow 0.5
+		}
+		tags {
+			str 2
+			dex 0.5
+			melee 2
+			ranged 0.5
+			def 1.5
+			stamina 1.5
+			mage 0
 		}
 		perk talent strength
 		perk skill_focus weapon
@@ -551,6 +634,15 @@ profile warrior {
 			armor 0.9
 			bow 0.75
 			shield 0.75
+		}
+		tags {
+			str 2
+			dex 1
+			melee 2
+			ranged 1
+			def 1
+			stamina 1.5
+			mage 0
 		}
 		perk talent strength
 		perk skill_focus weapon
@@ -2020,17 +2112,17 @@ unit mage : base_human {
 			chance 9 magic_scroll
 			if chance 20 {
 				if chance 75 {
-					r_magic
+					r_mage
 				}
 				else {
-					a_magic
+					a_mage
 				}
 			}
 		}
 		else if level 9 {
 			chance 10 p_hp
 			chance 3 magic_scroll
-			chance 10 r_magic
+			chance 10 r_mage
 		}
 		else {
 			chance 5 p_hp

@@ -312,10 +312,29 @@ struct Armor : public Item
 };
 
 //-----------------------------------------------------------------------------
+enum ItemTag
+{
+	TAG_NONE = -1,
+	TAG_STR,
+	TAG_DEX,
+	TAG_MELEE,
+	TAG_RANGED,
+	TAG_DEF,
+	TAG_STAMINA,
+	TAG_MAGE,
+	TAG_MAX
+};
+static_assert(TAG_MAX < 32, "Too many ItemTag!");
+
+static const int MAX_ITEM_TAGS = 2;
+
+//-----------------------------------------------------------------------------
 // Amulet
 struct Amulet : public Item
 {
-	Amulet() : Item(IT_AMULET) {}
+	Amulet() : Item(IT_AMULET), tag() {}
+
+	ItemTag tag[MAX_ITEM_TAGS];
 
 	static vector<Amulet*> amulets;
 };
@@ -324,7 +343,9 @@ struct Amulet : public Item
 // Ring
 struct Ring : public Item
 {
-	Ring() : Item(IT_RING) {}
+	Ring() : Item(IT_RING), tag() {}
+
+	ItemTag tag[MAX_ITEM_TAGS];
 
 	static vector<Ring*> rings;
 };

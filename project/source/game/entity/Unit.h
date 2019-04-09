@@ -361,7 +361,8 @@ struct Unit
 	float CalculateWeaponPros(const Weapon& weapon) const;
 	bool IsBetterWeapon(const Weapon& weapon, int* value = nullptr, int* prev_value = nullptr) const;
 	bool IsBetterArmor(const Armor& armor, int* value = nullptr, int* prev_value = nullptr) const;
-	bool IsBetterItem(const Item* item, int* value = nullptr, int* prev_value = nullptr) const;
+	bool IsBetterItem(const Item* item, int* value = nullptr, int* prev_value = nullptr, ITEM_SLOT* target_slot = nullptr) const;
+	float GetItemAiValue(const Item* item) const;
 	bool IsPlayer() const { return (player != nullptr); }
 	bool IsClient() const { return IsPlayer() && !player->IsLocal(); }
 	bool IsLocal() const { return IsPlayer() && player->IsLocal(); }

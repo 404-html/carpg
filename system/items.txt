@@ -160,6 +160,7 @@ weapon sword_adamantine {
 weapon sword_semur {
 	weight 1.8
 	value 30000
+	ai_value 500
 	mesh "semur.qmsh"
 	attack 200
 	req_str 45
@@ -395,9 +396,9 @@ weapon frying_pan {
 weapon wand_1 {
 	weight 0.6
 	value 75
+	ai_value 100
 	mesh "rozdzka1.qmsh"
 	attack 10
-	attraction 10
 	req_str 15
 	type blunt
 	material wood
@@ -411,9 +412,9 @@ weapon wand_1 {
 weapon wand_2 {
 	weight 0.6
 	value 150
+	ai_value 200
 	mesh "rozdzka2.qmsh"
 	attack 15
-	attraction 90
 	req_str 15
 	type blunt
 	material wood
@@ -427,9 +428,9 @@ weapon wand_2 {
 weapon wand_3 {
 	weight 0.6
 	value 250
+	ai_value 300
 	mesh "rozdzka3.qmsh"
 	attack 20
-	attraction 130
 	req_str 15
 	type blunt
 	material wood
@@ -1350,12 +1351,12 @@ armor am_orc {
 armor al_mage {
 	weight 1.5
 	value 30
+	ai_value 100
 	mesh "robe.qmsh"
 	type light
 	unit_type human
 	material cloth
 	defense 20
-	attraction 10
 	req_str 20
 	mobility 90
 	flags {not_shop not_chest mage magical}
@@ -1367,13 +1368,13 @@ armor al_mage {
 armor al_mage2 {
 	weight 1.5
 	value 100
+	ai_value 200
 	mesh "robe.qmsh"
 	tex_override "robe2.jpg"
 	type light
 	unit_type human
 	material cloth
 	defense 30
-	attraction 90
 	req_str 20
 	mobility 90
 	flags {not_shop not_chest mage magical}
@@ -1386,13 +1387,13 @@ armor al_mage2 {
 armor al_mage3 {
 	weight 1.5
 	value 350
+	ai_value 300
 	mesh "robe.qmsh"
 	tex_override "robe3.jpg"
 	type light
 	unit_type human
 	material cloth
 	defense 40
-	attraction 130
 	req_str 20
 	mobility 90
 	flags {not_shop not_chest mage magical}
@@ -1405,6 +1406,7 @@ armor al_mage3 {
 armor al_mage4 {
 	weight 1.5
 	value 1500
+	ai_value 400
 	mesh "robe.qmsh"
 	tex_override "robe4.jpg"
 	type light
@@ -1423,6 +1425,7 @@ armor al_mage4 {
 armor al_necromancer {
 	weight 2
 	value 80
+	ai_value 250
 	mesh "necromancer_robe.qmsh"
 	type light
 	unit_type human
@@ -1533,6 +1536,7 @@ amulet a_diamond {
 
 amulet a_food : a_silver {
 	value 750
+	ai_value 180
 	flags magical
 	effects {
 		natural_healing_mod 1.5
@@ -1541,67 +1545,82 @@ amulet a_food : a_silver {
 
 amulet a_sprinter : a_silver {
 	value 750
+	ai_value 180
 	flags magical
 	effects {
 		mobility 25
 	}
+	tag dex
 }
 
 amulet a_mage : a_gold {
 	value 1500
+	ai_value 240
 	flags magical
 	effects {
 		magic_power 2
 	}
+	tag mage
 }
 
 amulet a_defense : a_gold {
 	value 1500
+	ai_value 240
 	flags magical
 	effects {
 		defense 50
 	}
+	tag def
 }
 
 amulet a_stamina : a_gold {
 	value 1500
+	ai_value 240
 	flags magical
 	effects {
 		stamina 100
 		stamina_regeneration_mod 1.25
 	}
+	tag stamina
 }
 
 amulet a_warrior : a_ruby {
 	value 3000
+	ai_value 300
 	flags magical
 	effects {
 		attribute str 10
 		melee_attack 50
 		skill one_handed_weapon 20
 	}
+	tag {melee str}
 }
 
 amulet a_archer : a_ruby {
 	value 3000
+	ai_value 300
 	flags magical
 	effects {
 		attribute dex 10
 		ranged_attack 50
 		skill bow 20
 	}
+	tag {ranged dex}
 }
 
 amulet a_antimagic : a_ruby {
 	value 3000
+	ai_value 300
 	flags magical
 	effects {
 		magic_resistance 0.25
 	}
+	tag def
 }
 
 amulet a_health : a_diamond {
 	value 6000
+	ai_value 360
 	flags magical
 	effects {
 		health 250
@@ -1609,6 +1628,7 @@ amulet a_health : a_diamond {
 		regeneration 10
 		poison_resistance 0.25
 	}
+	tag def
 }
 
 //------------------------------------------------------------------------------
@@ -1634,158 +1654,197 @@ ring r_emerald {
 
 ring r_str : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		attribute str 5
 	}
+	tag str
 }
 
 ring r_end : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		attribute end 5
 	}
+	tag def
 }
 
 ring r_dex : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		attribute dex 5
 	}
+	tag dex
 }
 
 ring r_hp : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		health 100
 	}
+	tag def
 }
 
 ring r_stamina : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		stamina 50
 	}
+	tag stamina
 }
 
 ring r_def : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		defense 15
 	}
+	tag def
 }
 
 ring r_attack : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		melee_attack 15
 	}
+	tag melee
 }
 
 ring r_ranged_attack : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		ranged_attack 15
 	}
+	tag ranged
 }
 
 ring r_mage : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		magic_power 1
 	}
+	tag mage
 }
 
 ring r_one_handed_weapon : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		skill one_handed_weapon 10
 	}
+	tag melee
 }
 
 ring r_short_blade : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		skill short_blade 10
 	}
+	tag melee
 }
 
 ring r_long_blade : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		skill long_blade 10
 	}
+	tag melee
 }
 
 ring r_axe : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		skill axe 10
 	}
+	tag melee
 }
 
 ring r_blunt : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		skill blunt 10
 	}
+	tag melee
 }
 
 ring r_bow : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		skill bow 10
 	}
+	tag ranged
 }
 
 ring r_shield : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		skill shield 10
 	}
+	tag def
 }
 
 ring r_light_armor : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		skill light_armor 10
 	}
+	tag def
 }
 
 ring r_medium_armor : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		skill medium_armor 10
 	}
+	tag def
 }
 
 ring r_heavy_armor : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		skill heavy_armor 10
 	}
+	tag def
 }
 
 ring r_haggle : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		skill haggle 10
@@ -1794,6 +1853,7 @@ ring r_haggle : r_gold {
 
 ring r_carry : r_gold {
 	value 500
+	ai_value 160
 	flags magical
 	effects {
 		carry 1.5
@@ -1802,50 +1862,62 @@ ring r_carry : r_gold {
 
 ring r_str2 : r_emerald {
 	value 1500
+	ai_value 220
 	flags magical
 	effects {
 		attribute str 15
 	}
+	tag str
 }
 
 ring r_end2 : r_emerald {
 	value 1500
+	ai_value 220
 	flags magical
 	effects {
 		attribute end 15
 	}
+	tag def
 }
 
 ring r_dex2 : r_emerald {
 	value 1500
+	ai_value 220
 	flags magical
 	effects {
 		attribute dex 15
 	}
+	tag dex
 }
 
 ring r_regeneration : r_emerald {
 	value 1500
+	ai_value 220
 	flags magical
 	effects {
 		regeneration 5
 	}
+	tag def
 }
 
 ring r_assassin : r_emerald {
 	value 1500
+	ai_value 220
 	flags magical
 	effects {
 		backstab 0.25
 	}
+	tag melee
 }
 
 ring r_poison_resistance : r_emerald {
 	value 1500
+	ai_value 220
 	flags magical
 	effects {
 		poison_resistance 0.5
 	}
+	tag def
 }
 
 //------------------------------------------------------------------------------
