@@ -73,7 +73,7 @@ const Item* UnitHelper::GetBaseItem(ITEM_TYPE type, const ItemList* lis)
 
 UnitHelper::BetterItem UnitHelper::GetBetterAmulet(const Unit& unit)
 {
-	static const LeveledItemList* lis = ItemList::Get("amulet").llis;
+	static const LeveledItemList* lis = ItemList::Get("amulets").llis;
 	const Item* amulet = unit.slots[SLOT_AMULET];
 	const Item* best_item = nullptr;
 	float prev_value = amulet ? unit.GetItemAiValue(amulet) : 0.f;
@@ -97,7 +97,7 @@ UnitHelper::BetterItem UnitHelper::GetBetterAmulet(const Unit& unit)
 
 array<UnitHelper::BetterItem, 2> UnitHelper::GetBetterRings(const Unit& unit)
 {
-	static const LeveledItemList* lis = ItemList::Get("ring").llis;
+	static const LeveledItemList* lis = ItemList::Get("rings").llis;
 	const Item* rings[2] = { unit.slots[SLOT_RING1], unit.slots[SLOT_RING2] };
 	float prev_value[2] = {
 		rings[0] ? unit.GetItemAiValue(rings[0]) : 0,

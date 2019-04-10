@@ -3010,7 +3010,7 @@ leveled_list mage_armor {
 	al_mage3 13
 }
 
-leveled_list amulet {
+leveled_list amulets {
 	a_food 9
 	a_sprinter 9
 	a_mage 12
@@ -3022,7 +3022,7 @@ leveled_list amulet {
 	a_health 18
 }
 
-leveled_list ring {
+leveled_list rings {
 	r_str 8
 	r_end 8
 	r_dex 8
@@ -3286,8 +3286,8 @@ stock alchemist_apprentice {
 }
 
 stock mage_seller {
-	random 2 4 amulet
-	random 6 8 ring
+	random 2 4 amulets
+	random 6 8 rings
 	random 1 2 magic_scroll
 }
 
