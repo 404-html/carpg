@@ -3556,7 +3556,7 @@ float Unit::GetItemAiValue(const Item* item) const
 	{
 		if(tags[i] == TAG_NONE)
 			break;
-		value *= priorities[tag[i]];
+		value *= priorities[tags[i]];
 	}
 
 	return value;

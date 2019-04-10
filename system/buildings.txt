@@ -383,6 +383,30 @@ building village_hall_old {
 	}
 }
 
+building mages_tower {
+	mesh "meges_tower.qmsh"
+	flags {favor_center favor_road have_name list}
+	scheme {
+		"   |||   "
+		" ||||||| "
+		" ||||||| "
+		"|||||||||"
+		"|||||||||"
+		"|||||||||"
+		" ||||||| "
+		" ||||||| "
+		"   |||   "
+		"    +@   "
+	}
+	unit mage_seller
+	shift {
+		bottom {1 1}
+		left {0 1}
+		top {1 0}
+		right {1 1}
+	}
+}
+
 
 //================================================================================
 // Building script

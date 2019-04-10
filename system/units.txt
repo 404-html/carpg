@@ -1037,6 +1037,20 @@ unit innkeeper : merchant {
 	dialog innkeeper
 }
 
+unit mage_seller : base_human {
+	level 10
+	profile ai_mage
+	flags | {ai_stay ai_guard dont_eat limited_rot mage}
+	items mage
+	trader {
+		stock mage_seller
+		groups {amulet ring}
+	}
+	gold {1000 2000}
+	spells mage
+	dialog mage_seller
+}
+
 unit arena_master : base_human {
 	level 15
 	flags | {ai_guard ai_stay limited_rot dont_eat talk_at_competition}

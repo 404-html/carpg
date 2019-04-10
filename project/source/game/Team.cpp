@@ -522,7 +522,7 @@ void TeamSingleton::CheckTeamItemShares()
 			int index = 0;
 			for(ItemSlot& slot : other_unit->items)
 			{
-				if(slot.item && unit->CanWear(slot.item) && slot.item->type != IT_AMULET && slot.item->type != IT_RING)
+				if(slot.item && unit->CanWear(slot.item))
 				{
 					// don't check if can't buy
 					if(slot.team_count == 0 && slot.item->value / 2 > unit->gold && unit != other_unit)
@@ -622,7 +622,8 @@ void TeamSingleton::UpdateTeamItemShares()
 	else
 	{
 		ItemSlot& slot = tsi.from->items[tsi.index];
-		if(!tsi.to->IsBetterItem(tsi.item))
+		ITEM_SLOT target_slot;
+		if(!tsi.to->IsBetterItem(tsi.item, nullptr, nullptr, &target_slot))
 			state = 0;
 		else
 		{
@@ -631,9 +632,8 @@ void TeamSingleton::UpdateTeamItemShares()
 
 			// old item, can be sold if overweight
 			int prev_item_weight;
-			ITEM_SLOT slot_type = ItemTypeToSlot(slot.item->type);
-			if(tsi.to->slots[slot_type])
-				prev_item_weight = tsi.to->slots[slot_type]->weight;
+			if(tsi.to->slots[target_slot])
+				prev_item_weight = tsi.to->slots[target_slot]->weight;
 			else
 				prev_item_weight = 0;
 
@@ -951,39 +951,59 @@ void TeamSingleton::BuyTeamItems()
 			if(priorities[i] == 0)
 				continue;
 
-			FIXME;
-			if(i == IT_AMULET || i == IT_RING)
-				continue;
-
-			const Item* item;
-			ITEM_SLOT slot = ItemTypeToSlot((ITEM_TYPE)i);
-			if(!unit->slots[slot])
+			ITEM_SLOT slot_type = ItemTypeToSlot((ITEM_TYPE)i);
+			if(slot_type == SLOT_AMULET)
 			{
-				switch(i)
+				UnitHelper::BetterItem result = UnitHelper::GetBetterAmulet(*unit);
+				if(result.item)
 				{
-				case IT_WEAPON:
-					item = UnitHelper::GetBaseWeapon(u, lis);
-					break;
-				case IT_ARMOR:
-					item = UnitHelper::GetBaseArmor(u, lis);
-					break;
-				default:
-					item = UnitHelper::GetBaseItem((ITEM_TYPE)i, lis);
-					break;
+					float real_value = 1000.f * (result.value - result.prev_value) * priorities[IT_AMULET] / result.item->value;
+					to_buy.push_back({ result.item, real_value });
+				}
+			}
+			else if(slot_type == SLOT_RING1)
+			{
+				array<UnitHelper::BetterItem, 2> result = UnitHelper::GetBetterRings(*unit);
+				for(int i = 0; i < 2; ++i)
+				{
+					if(result[i].item)
+					{
+						float real_value = 1000.f * (result[i].value - result[i].prev_value) * priorities[IT_AMULET] / result[i].item->value;
+						to_buy.push_back({ result[i].item, real_value });
+					}
 				}
 			}
 			else
-				item = ItemHelper::GetBetterItem(unit->slots[slot]);
-
-			while(item && u.gold >= item->value)
 			{
-				int value, prev_value;
-				if(u.IsBetterItem(item, &value, &prev_value))
+				const Item* item;
+				if(!unit->slots[slot_type])
 				{
-					float real_value = 1000.f * (value - prev_value) * priorities[IT_BOW] / item->value;
-					to_buy.push_back({ item, real_value });
+					switch(i)
+					{
+					case IT_WEAPON:
+						item = UnitHelper::GetBaseWeapon(u, lis);
+						break;
+					case IT_ARMOR:
+						item = UnitHelper::GetBaseArmor(u, lis);
+						break;
+					default:
+						item = UnitHelper::GetBaseItem((ITEM_TYPE)i, lis);
+						break;
+					}
 				}
-				item = ItemHelper::GetBetterItem(item);
+				else
+					item = ItemHelper::GetBetterItem(unit->slots[slot_type]);
+
+				while(item && u.gold >= item->value)
+				{
+					int value, prev_value;
+					if(u.IsBetterItem(item, &value, &prev_value))
+					{
+						float real_value = 1000.f * (value - prev_value) * priorities[IT_BOW] / item->value;
+						to_buy.push_back({ item, real_value });
+					}
+					item = ItemHelper::GetBetterItem(item);
+				}
 			}
 		}
 
